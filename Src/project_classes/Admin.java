@@ -2,7 +2,12 @@ package project_classes;
 
 public class Admin extends User{
 
-	@Override
+
+    public Admin(String name, String id, Role role, String password) {
+        super(name, id, role, password);
+    }
+
+    @Override
 	public void displayDashboard() {
 		// TODO Auto-generated method stub
 		

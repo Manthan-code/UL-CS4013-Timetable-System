@@ -1,7 +1,7 @@
 package project_classes;
 
-import project_classes.util.ArrayList;
-import project_classes.util.Arrays;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class testUsers {
 	public static void main(String[] args) {

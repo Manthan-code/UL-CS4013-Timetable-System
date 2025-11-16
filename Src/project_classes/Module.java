@@ -1,6 +1,6 @@
 package project_classes;
 
-import project_classes.util.*;
+import java.util.*;
 
 public class Module {
     /**

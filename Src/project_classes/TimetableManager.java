@@ -1,8 +1,8 @@
 package project_classes;
 
-import project_classes.util.ArrayList;
-import project_classes.util.HashSet;
-import project_classes.util.Set;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class TimetableManager {
     private ArrayList<TimeSlot> timeTableEntries;
