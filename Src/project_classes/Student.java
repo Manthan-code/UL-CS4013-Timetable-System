@@ -7,7 +7,11 @@ public class Student extends User {
     private int yearOfStudy;
     private int studentGroup; //this shouldnt be part of the student class, i just need it here to test code
     private ArrayList<Module> modulesList;
-
+    
+    /*** 
+     * Student constructor, takes in more student specific info 
+     * Passes other info to user constructor
+     * */
     public Student(String name, String id, int yearOfStudy, String programme, String password, int studentGroup, ArrayList<Module> modules) {
         super(name, id, Role.STUDENT, password);
         this.yearOfStudy = yearOfStudy;
@@ -19,25 +23,22 @@ public class Student extends User {
     public ArrayList<Module> getModules() {
         return modulesList;
     }
-
+/*** 
+ * returns program String value
+ * */
     public String getProgramme() {
         return programme;
     }
-
+    /*** 
+     * returns studentGroup int value
+     * */
     public int getStudentGroup() {
         return studentGroup;
     }
-
-    public void enrollInModule(Module newModule) {
-        if (!modulesList.contains(newModule)) {
-            modulesList.add(newModule);
-        }
-    }
-
-    public void dropModule(Module chosenModule) {
-        modulesList.remove(chosenModule);
-    }
-
+    
+    /*** 
+     * prints a CLI dashboard for the student
+     * */
     @Override
     public void displayDashboard() {
         System.out.println("=== STUDENT DASHBOARD ===");
@@ -49,7 +50,11 @@ public class Student extends User {
         //System.out.println("Group: " + Group.getGroupId()); //using some group class
         System.out.println("\n");
     }
-
+    /*** 
+     * prints Timetable for student
+     * */
+    
+    //NOT DONE YET!!!
     @Override
     public void viewTimetable() {
         System.out.println("=== STUDENT TIMETABLE ===");
@@ -61,6 +66,9 @@ public class Student extends User {
         System.out.println("\n");
     }
     
+    /*** 
+     * basic toString method which returns student info
+     * */
     public String toString(){
     	return "Name: " + getName() + "\n" + 
     			"Id: " + getId() + "\n" + 
