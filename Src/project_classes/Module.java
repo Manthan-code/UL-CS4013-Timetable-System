@@ -7,26 +7,30 @@ public class Module {
      * Class which represents a module in the timetable
      */
 
+    private String name;
     private double lectureHours;
     private double labHours;
     private double tutorialHours;
     private int lecturerCount;
     private String lecturer;
     private String moduleCode;
+    private int semesterTakenIn;
 
     private ArrayList<String> programmes;
     private ArrayList<String> lecturers;
 
-    public Module(String moduleCode) {
+    public Module(String moduleCode,String name) {
         this.moduleCode = moduleCode;
         this.lecturerCount = 0;
         this.lectureHours = 0.0;
         this.labHours = 0.0;
         this.tutorialHours = 0.0;
+        this.semesterTakenIn = 0;
     }
 
     public Module(double lectureHours,double labHours,double tutorialHours,
-                  int lecturerCount,String lecturer,String moduleCode,ArrayList<String> programmes) {
+                  int lecturerCount,String lecturer,String moduleCode,ArrayList<String> programmes,
+                  int semesterTakenIn) {
         this.lectureHours = lectureHours;
         this.labHours = labHours;
         this.tutorialHours = tutorialHours;
@@ -39,6 +43,16 @@ public class Module {
         } else {
             this.lecturers = new ArrayList<>();
         }
+
+        if(semesterTakenIn > 0 && semesterTakenIn <= 2) {
+            this.semesterTakenIn = semesterTakenIn;
+        } else {
+            this.semesterTakenIn = 0;
+        }
+    }
+
+    public Module(String moduleCode) {
+        this.moduleCode = moduleCode;
     }
 
     /**
@@ -68,6 +82,12 @@ public class Module {
     public String getModuleCode() { return moduleCode;}
 
     /**
+     * Gets the module name
+     * @return String name of the module
+     */
+    public String getModuleName(){return name;}
+
+    /**
      * Gets the programme(s) the module is taken in
      * @return String of Array List programmes
      */
@@ -83,7 +103,7 @@ public class Module {
         if(lecturerCount == 1) {
             lectureString =  lecturer;
         } else {
-            lectureString = lecturers.toString();
+            lectureString = lecturer.toString();
         }
 
         return lectureString;

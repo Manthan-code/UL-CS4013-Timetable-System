@@ -1,6 +1,6 @@
 package project_classes;
 
-import project_classes.util.ArrayList;
+import java.util.ArrayList;
 
 public class Student extends User {
     private String programme;
@@ -15,28 +15,35 @@ public class Student extends User {
         this.studentGroup = studentGroup;
         this.modulesList = modules;
     }
+    /***
+     * Gets the modules the student is taking
+     * @return List of modules the student is taking
+     */
 
     public ArrayList<Module> getModules() {
         return modulesList;
     }
 
+    /***
+     * Gets the program the student is in
+     * @return String value
+     **/
+
     public String getProgramme() {
         return programme;
     }
+    /***
+     * Gets the ID of the group the student is in
+     * @return int ID of the student's group
+     **/
 
     public int getStudentGroup() {
         return studentGroup;
     }
 
-    public void enrollInModule(Module newModule) {
-        if (!modulesList.contains(newModule)) {
-            modulesList.add(newModule);
-        }
-    }
-
-    public void dropModule(Module chosenModule) {
-        modulesList.remove(chosenModule);
-    }
+    /***
+     * Displays CLI dashboard to student
+     **/
 
     @Override
     public void displayDashboard() {
@@ -50,13 +57,17 @@ public class Student extends User {
         System.out.println("\n");
     }
 
+    /***
+     * Prints timetable for student
+     */
+
     @Override
     public void viewTimetable() {
         System.out.println("=== STUDENT TIMETABLE ===");
         System.out.println("Student: " + getName() + " (" + getId() + ")");
         for (int i = 0; i < modulesList.size(); i++) {
             Module module = modulesList.get(i);
-            System.out.println("Module: " + module.getCode() + " - " + module.getName());
+            System.out.println("Module: " + module.getModuleCode() + " - " + module.getModuleName());
         }
         System.out.println("\n");
     }
