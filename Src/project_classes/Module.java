@@ -7,6 +7,7 @@ public class Module {
      * Class which represents a module in the timetable
      */
 
+    private String name;
     private double lectureHours;
     private double labHours;
     private double tutorialHours;
@@ -17,7 +18,7 @@ public class Module {
     private ArrayList<String> programmes;
     private ArrayList<String> lecturers;
 
-    public Module(String moduleCode) {
+    public Module(String moduleCode,String name) {
         this.moduleCode = moduleCode;
         this.lecturerCount = 0;
         this.lectureHours = 0.0;
@@ -39,6 +40,10 @@ public class Module {
         } else {
             this.lecturers = new ArrayList<>();
         }
+    }
+
+    public Module(String moduleCode) {
+        this.moduleCode = moduleCode;
     }
 
     /**
@@ -66,6 +71,12 @@ public class Module {
      * @return String moduleCode
      */
     public String getModuleCode() { return moduleCode;}
+
+    /**
+     * Gets the module name
+     * @return String name of the module
+     */
+    public String getModuleName(){return name;}
 
     /**
      * Gets the programme(s) the module is taken in
