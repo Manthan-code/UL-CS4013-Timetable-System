@@ -17,11 +17,19 @@ public class Admin extends User{
         modulesList.remove(chosenModule);
     }
     
+    /**
+     * Displays the timetable dashboard to th user on the screen.
+     */
+
     @Override
 	public void displayDashboard() {
 		// TODO Auto-generated method stub
 		
 	}
+
+    /**
+     * Allows user to view the timetable.
+     */
 
 	@Override
 	public void viewTimetable() {
