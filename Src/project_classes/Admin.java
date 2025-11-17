@@ -7,11 +7,19 @@ public class Admin extends User{
         super(name, id, role, password);
     }
 
+    /**
+     * Displays the timetable dashboard to th user on the screen.
+     */
+
     @Override
 	public void displayDashboard() {
 		// TODO Auto-generated method stub
 		
 	}
+
+    /**
+     * Allows user to view the timetable.
+     */
 
 	@Override
 	public void viewTimetable() {
