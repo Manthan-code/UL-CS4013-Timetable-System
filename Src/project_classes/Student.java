@@ -1,6 +1,6 @@
 package project_classes;
 
-import project_classes.util.ArrayList;
+import java.util.ArrayList;
 
 public class Student extends User {
     private String programme;
@@ -56,7 +56,7 @@ public class Student extends User {
         System.out.println("Student: " + getName() + " (" + getId() + ")");
         for (int i = 0; i < modulesList.size(); i++) {
             Module module = modulesList.get(i);
-            System.out.println("Module: " + module.getCode() + " - " + module.getName());
+            System.out.println("Module: " + module.getModuleCode() + " - " + module.getModuleName());
         }
         System.out.println("\n");
     }
