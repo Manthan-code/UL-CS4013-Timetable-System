@@ -15,28 +15,35 @@ public class Student extends User {
         this.studentGroup = studentGroup;
         this.modulesList = modules;
     }
+    /***
+     * Gets the modules the student is taking
+     * @return List of modules the student is taking
+     */
 
     public ArrayList<Module> getModules() {
         return modulesList;
     }
 
+    /***
+     * Gets the program the student is in
+     * @return String value
+     **/
+
     public String getProgramme() {
         return programme;
     }
+    /***
+     * Gets the ID of the group the student is in
+     * @return int ID of the student's group
+     **/
 
     public int getStudentGroup() {
         return studentGroup;
     }
 
-    public void enrollInModule(Module newModule) {
-        if (!modulesList.contains(newModule)) {
-            modulesList.add(newModule);
-        }
-    }
-
-    public void dropModule(Module chosenModule) {
-        modulesList.remove(chosenModule);
-    }
+    /***
+     * Displays CLI dashboard to student
+     **/
 
     @Override
     public void displayDashboard() {
@@ -49,6 +56,10 @@ public class Student extends User {
         //System.out.println("Group: " + Group.getGroupId()); //using some group class
         System.out.println("\n");
     }
+
+    /***
+     * Prints timetable for student
+     */
 
     @Override
     public void viewTimetable() {
