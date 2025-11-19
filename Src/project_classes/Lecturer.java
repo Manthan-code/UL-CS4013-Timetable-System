@@ -8,7 +8,7 @@ public class Lecturer extends User{
 	
 	
 	public Lecturer(String name, String id, String password, ArrayList<Module> modules) {
-        super(name, id, Role.STUDENT, password);
+        super(name, id);
         teachingModules = modules;
         //add group later
     }

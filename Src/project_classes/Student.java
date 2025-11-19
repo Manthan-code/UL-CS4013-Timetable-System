@@ -5,11 +5,12 @@ import java.util.ArrayList;
 public class Student extends User {
     private String programme;
     private int yearOfStudy;
-    private int studentGroup; //this shouldnt be part of the student class, i just need it here to test code
+    private int studentGroup; //this shouldn't be part of the student class, i just need it here to test code
     private ArrayList<Module> modulesList;
 
-    public Student(String name, String id, int yearOfStudy, String programme, String password, int studentGroup, ArrayList<Module> modules) {
-        super(name, id, Role.STUDENT, password);
+    public Student(String name, String id, int yearOfStudy, String programme,
+                                 int studentGroup, ArrayList<Module> modules) {
+        super(name, id);
         this.yearOfStudy = yearOfStudy;
         this.programme = programme;
         this.studentGroup = studentGroup;
@@ -74,11 +75,9 @@ public class Student extends User {
     
     public String toString(){
     	return "Name: " + getName() + "\n" + 
-    			"Id: " + getId() + "\n" + 
-    			"Role: " + getRole() + "\n" + 
+    			"Id: " + getId() + "\n" +
     			"Year: " + yearOfStudy + "\n" + 
-    			"Programme: " + programme + "\n" + 
-    			"Password: " + "secure password omg" +  "\n" + 
+    			"Programme: " + programme + "\n" +
     			"Student Group: " + studentGroup + "\n" + 
     			"Modules: " + modulesList.toString() + "\n";
     }
