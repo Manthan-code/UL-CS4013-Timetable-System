@@ -6,6 +6,13 @@ public class Room {
     String roomCode;
     double hours;
 
+    public Room(String s, int i, String s1, double v) {
+        this.roomType = s;
+        this.capacity = i;
+        this.roomCode = s1;
+        this.hours = v;
+    }
+
 
     /**
      * returns the type of room

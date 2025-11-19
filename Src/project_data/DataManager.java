@@ -1,27 +1,45 @@
 package project_data;
+
+import java.io.*;
+import java.util.*;
+
+import project_classes.Room;
 import project_io.CSVReader;
-import project_io.CSVWriter;
+
+
 public class DataManager {
     /**
      * Class that will manage data from CSV files
      */
 
-    private CSVReader reader;
-    private CSVWriter writer;
-
-    //constructor sets up the file readers/writers
     public DataManager() {
-        this.reader = new CSVReader();
-        this.writer = new CSVWriter();
+
     }
 
     /**
-     * Loads all the data from CSV files in the system
+     * Creates room objects from CSV file
+     * @return List of rooms made from CSV file
      */
-    public void loadAllData() {
-        //will load modules.csv, lecturers.csv, rooms.csv, etc.
-        //convert into objects
+
+    public List<Room> loadModules(String filepath){
+        List<Room> rooms = new ArrayList<>();
+        List<String[]> rows = CSVReader.readCSV("data/modules.csv");
+
+        for(int i = 0; i < rows.size(); i++){
+            String[] row = rows.get(i);
+
+            Room room = new Room (
+                    row[1], // roomType
+                    Integer.parseInt(row[2]),// room capacity
+                    row[3] ,// room code
+                    Double.parseDouble(row[4]) // room hours
+            );
+        }
+
+        return rooms;
     }
+
+
 
     /**
      * Saves all the data loaded from the CSV files
