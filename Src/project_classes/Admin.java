@@ -6,7 +6,17 @@ public class Admin extends User{
     public Admin(String name, String id) {
         super(name, id);
     }
+    //adding these basic functions to admin, i will do a proper job later
+    public void enrollInModule(Module newModule) {
+        if (!modulesList.contains(newModule)) {
+            modulesList.add(newModule);
+        }
+    }
 
+    public void dropModule(Module chosenModule) {
+        modulesList.remove(chosenModule);
+    }
+    
     /**
      * Displays the timetable dashboard to th user on the screen.
      */
