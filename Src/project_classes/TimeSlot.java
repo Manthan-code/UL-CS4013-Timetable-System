@@ -43,7 +43,7 @@ public class TimeSlot {
 
     /**
      * Gets the module that the time slot is part of
-     * @return Module module that the time slot is concerned with
+     * @return module that the time slot is concerned with
      */
     public Module getModule() {return module;}
 

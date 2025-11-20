@@ -3,8 +3,8 @@ package project_classes;
 public class Admin extends User{
 
 
-    public Admin(String name, String id, Role role, String password) {
-        super(name, id, role, password);
+    public Admin(String name, String id) {
+        super(name, id);
     }
     //adding these basic functions to admin, i will do a proper job later
     public void enrollInModule(Module newModule) {

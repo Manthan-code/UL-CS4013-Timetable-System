@@ -7,8 +7,8 @@ public class Lecturer extends User{
 	//private ArrayList<Group> classGroupList; //again I think I need some sort of Group class for this
 	
 	
-	public Lecturer(String name, String id, String password, ArrayList<Module> modules) {
-        super(name, id, Role.STUDENT, password);
+	public Lecturer(String name, String id,ArrayList<Module> modules) {
+        super(name, id);
         teachingModules = modules;
         //add group later
     }
