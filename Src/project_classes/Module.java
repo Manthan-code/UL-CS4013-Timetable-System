@@ -7,27 +7,19 @@ public class Module {
      * Class which represents a module in the timetable
      */
 
+    private String moduleCode;
     private String name;
     private double lectureHours;
     private double labHours;
     private double tutorialHours;
-    private String moduleCode;
 
-    public Module(String moduleCode,String name) {
-        this.moduleCode = moduleCode;
-        this.lectureHours = 0.0;
-        this.labHours = 0.0;
-        this.tutorialHours = 0.0;
-    }
 
     public Module(String moduleCode,String name,double lectureHours,double labHours,double tutorialHours) {
+        this.moduleCode = moduleCode;
+        this.name = name;
         this.lectureHours = lectureHours;
         this.labHours = labHours;
         this.tutorialHours = tutorialHours;
-    }
-
-    public Module(String moduleCode) {
-        this.moduleCode = moduleCode;
     }
 
     /**
