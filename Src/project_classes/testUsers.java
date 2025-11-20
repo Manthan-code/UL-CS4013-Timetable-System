@@ -9,8 +9,7 @@ public class testUsers {
 				"Mickey Mouse", 
 				"12345678", 
 				2, 
-				"Bsc Computers", 
-				"SecurePass25!", 
+				"Bsc Computers",
 				1, 
 				new ArrayList<Module>(
 				Arrays.asList(

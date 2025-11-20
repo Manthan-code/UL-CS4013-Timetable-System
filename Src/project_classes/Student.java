@@ -37,26 +37,6 @@ public class Student extends User {
         return studentGroup;
     }
     
-    /*** 
-     * prints a CLI dashboard for the student
-     * */
-
-    /***
-     * Gets the program the student is in
-     * @return String value
-     **/
-
-    public String getProgramme() {
-        return programme;
-    }
-    /***
-     * Gets the ID of the group the student is in
-     * @return int ID of the student's group
-     **/
-
-    public int getStudentGroup() {
-        return studentGroup;
-    }
 
     /***
      * Displays CLI dashboard to student

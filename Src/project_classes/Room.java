@@ -10,7 +10,8 @@ public class Room {
 
 
     public Room(String roomType, int maxCapacity, String roomCode, double hours) {
-        // Check to see if roomType is valid - E.g. either "lec" or "LEC"
+
+        // Check to see if roomType is valid - E.g. Either "lec" or "LEC"
         if(roomType.equalsIgnoreCase("LEC") || roomType.equalsIgnoreCase("LAB")
                 || roomType.equalsIgnoreCase("TUT")) {
             this.roomType = roomType;

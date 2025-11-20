@@ -28,14 +28,12 @@ public class Module {
         this.semesterTakenIn = 0;
     }
 
-    public Module(double lectureHours,double labHours,double tutorialHours,
-                  int lecturerCount,String lecturer,String moduleCode,ArrayList<String> programmes,
-                  int semesterTakenIn) {
+    public Module(String moduleCode,String name,double lectureHours,double labHours,double tutorialHours,
+                  int lecturerCount , String lecturer,int semesterTakenIn) {
         this.lectureHours = lectureHours;
         this.labHours = labHours;
         this.tutorialHours = tutorialHours;
         this.lecturerCount = lecturerCount;
-        this.programmes = new ArrayList<>();
 
         // Relevant data field used to represent lecturer(s) of module based on lecturerCount
         if(lecturerCount == 1) {
@@ -103,7 +101,7 @@ public class Module {
         if(lecturerCount == 1) {
             lectureString =  lecturer;
         } else {
-            lectureString = lecturer.toString();
+            lectureString = lecturers.toString();
         }
 
         return lectureString;
