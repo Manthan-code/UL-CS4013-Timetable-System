@@ -24,6 +24,22 @@ public class Student extends User {
     public ArrayList<Module> getModules() {
         return modulesList;
     }
+/*** 
+ * returns program String value
+ * */
+    public String getProgramme() {
+        return programme;
+    }
+    /*** 
+     * returns studentGroup int value
+     * */
+    public int getStudentGroup() {
+        return studentGroup;
+    }
+    
+    /*** 
+     * prints a CLI dashboard for the student
+     * */
 
     /***
      * Gets the program the student is in
@@ -57,6 +73,11 @@ public class Student extends User {
         //System.out.println("Group: " + Group.getGroupId()); //using some group class
         System.out.println("\n");
     }
+    /*** 
+     * prints Timetable for student
+     * */
+    
+    //NOT DONE YET!!!
 
     /***
      * Prints timetable for student
@@ -73,6 +94,9 @@ public class Student extends User {
         System.out.println("\n");
     }
     
+    /*** 
+     * basic toString method which returns student info
+     * */
     public String toString(){
     	return "Name: " + getName() + "\n" + 
     			"Id: " + getId() + "\n" +
