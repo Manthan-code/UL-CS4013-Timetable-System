@@ -11,125 +11,96 @@ import project_io.CSVReader;
 
 
 public class DataManager {
+
+
+        // Method which safely handles errors reading int values
+        private static int parseIntSafe(String value) {
+            try {
+                return Integer.parseInt(value.trim());
+            } catch (NumberFormatException e) {
+                return 0;
+            }
+        }
+
     /**
-     * Class that will manage data from CSV files
+     * Returns the list of rooms read from CSV file
+     * @param filepath String file path of CSV file
+     * @return List of rooms from CSV file (without duplicates)
      */
 
-    public DataManager() {
+    public static Set<Room> loadRooms(String filepath) {
+           // Set of rooms from CSV file
+            Set<Room> rooms = new HashSet<>();
 
-    }
+            // Getting rows from CSV file
+            List<String[]> rows = CSVReader.readCSV(filepath);
 
-    /**
-     * Creates room objects from CSV file
-     * @return List of rooms made from CSV file (without duplicates)
-     */
+            // Looping through rows
+            for (String[] row : rows) {
 
-    public static Set<Room> loadRooms(String filename) {
-        // Try and read the CSV rooms file
-        Set<Room> roomSet = null;
-        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
-            String line;
-            boolean isHeader = true;
-
-            // Set of rooms to remove duplicates
-            roomSet = new HashSet<>();
-            // To skip the first line
-            while ((line = br.readLine()) != null) {
-                if (isHeader) {
-                    isHeader = false;
-                    continue;
-                }
-
-                String[] values = line.split(",");
-                // If there is at least one row representing a room
-                if (values.length >= 6) {
-                    String roomCode = values[4].trim();
-                    roomSet.add(new Room(roomCode));
+                if (row.length > 4) {
+                    String roomCode = row[4].trim();
+                    rooms.add(new Room(roomCode));
                 }
             }
-        } catch (IOException | NumberFormatException e) {
-            System.err.println("Error loading rooms: " + e.getMessage());
+            return rooms;
         }
-        return roomSet;
-    }
 
     /**
-     * Creates module objects from CSV file
-     * @return List of modules created from CSV file (without duplicates)
+     * Returns the list of modules read from CSV file
+     * @param filepath String file path of CSV file
+     * @return List of modules from CSV file (without duplicates)
      */
 
-    public static Set<Module> loadModules(String filename) {
-        Set<Module> moduleSet = null;
-        // Try to read the file from the CSV file
-        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
-            String line;
-            boolean isHeader = true;
+        public static Set<Module> loadModules(String filepath) {
+            // Set of modules from CSV files
+            Set<Module> modules = new HashSet<>();
 
-            moduleSet = new HashSet<>();
-            while ((line = br.readLine()) != null) {
-                if (isHeader) {
-                    isHeader = false;
-                    continue;
-                }
+            List<String[]> rows = CSVReader.readCSV(filepath);
 
-                String[] values = line.split(",");
-                if (values.length >= 6) {
-                    String moduleCode = values[4].trim();
-                    String lecturer = values[6].trim();
-                    moduleSet.add(new Module(moduleCode, lecturer));
+            for (String[] row : rows) {
+                if (row.length > 6) {
+                    String moduleCode = row[4].trim();
+                    String lecturer = row[6].trim();
+                    modules.add(new Module(moduleCode, lecturer));
                 }
             }
-        } catch (IOException | NumberFormatException e) {
-            System.err.println("Error loading modules: " + e.getMessage());
+            return modules;
         }
-        return moduleSet;
-
-    }
 
     /**
-     * Create time slot objects from a CSV file
-     * @param filename String file path of CSV file
-     * @return List of Timeslots in the system
+     * Gets list of timeslots ferom CSV File
+     * @param filepath String file path of CSV file
+     * @return List of Timeslots from CSV file
      */
 
-    public static List<TimeSlot> loadTimeSlots(String filename) {
-        List<TimeSlot> slots = null;
-        // Try to read the timeslot info from the CSV file
-        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
-            String line;
-            boolean isHeader = true;
+    public static List<TimeSlot> loadTimeSlots(String filepath) {
 
-            slots = new ArrayList<>();
+            List<TimeSlot> slots = new ArrayList<>();
+            List<String[]> rows = CSVReader.readCSV(filepath);
 
-            // Skip the first line/header
-            while ((line = br.readLine()) != null) {
-                if (isHeader) {
-                    isHeader = false;
-                    continue;
-                }
+            for (String[] row : rows) {
+                if (row.length > 8) {
+                    try {
+                        String dayOfWeek = row[0].trim();
+                        String startTime = row[1].trim();
+                        String endTime   = row[2].trim();
+                        String moduleCode= row[3].trim();
+                        String roomCode  = row[4].trim();
+                        String classType = row[5].trim();
 
-                String[] values = line.split(",");
-                if (values.length >= 9) {
-                    String dayOfWeek = values[0].trim();
-                    String startTime = values[1].trim();
-                    String endTime = values[2].trim();
-                    String moduleCode = values[3].trim();
-                    String roomCode = values[4].trim();
-                    String classType = values[5].trim();
-                    int startingWeek = Integer.parseInt(values[7].trim());
-                    int endingWeek = Integer.parseInt(values[8].trim());
+                        // Parse integers safely
+                        int startWeek = parseIntSafe(row[7]);
+                        int endWeek   = parseIntSafe(row[8]);
 
-
-                    slots.add(new TimeSlot(dayOfWeek, startTime, endTime,
-                              moduleCode, roomCode, classType, startingWeek, endingWeek));
+                        slots.add(new TimeSlot(dayOfWeek, startTime, endTime,
+                                moduleCode, roomCode, classType,
+                                startWeek, endWeek));
+                    } catch (Exception e) {
+                        System.err.println("Skipping invalid row: " + Arrays.toString(row));
+                    }
                 }
             }
-        } catch (IOException | NumberFormatException e) {
-            System.err.println("Error loading modules: " + e.getMessage());
+            return slots;
         }
-        return slots;
-
     }
-
-
-}
