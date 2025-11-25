@@ -1,6 +1,5 @@
 package project_classes;
 
-import java.time.LocalTime;
 
 public class TimeSlot {
     /**
@@ -8,21 +7,28 @@ public class TimeSlot {
      */
 
     private String dayOfWeek;
-    private LocalTime startingTime;
-    private LocalTime endingTime;
+    private String startingTime;
+    private String endingTime;
     private String moduleCode;
+    private String roomCode;
     private Module module;
     private String classType;
+    private int startingWeek;
+    private int endingWeek;
 
-    public TimeSlot(String dayOfWeek, LocalTime startingTime, LocalTime endingTime,
-            String moduleCode, String classType) {
+    public TimeSlot(String dayOfWeek, String startingTime, String endingTime,
+            String moduleCode,String roomCode, String classType,int startingWeek,int endingWeek) {
         this.dayOfWeek = dayOfWeek;
         this.startingTime = startingTime;
         this.endingTime = endingTime;
 
         this.moduleCode = moduleCode;
         this.module = new Module(moduleCode);
+        this.roomCode = roomCode;
         this.classType = classType;
+
+        this.startingWeek = startingWeek;
+        this.endingWeek = endingWeek;
     }
 
     /**
@@ -34,12 +40,12 @@ public class TimeSlot {
      * Gets the start time of the slot
      * @return LocalTime Start time of the time slot
      */
-    public LocalTime getStartTime() {return startingTime;}
+    public String getStartTime() {return startingTime;}
     /**
      * Gets the end time of the slot
      * @return LocalTime End time of the time slot
      */
-    public LocalTime getEndTime() {return endingTime;}
+    public String getEndTime() {return endingTime;}
 
     /**
      * Gets the module that the time slot is part of
@@ -61,7 +67,7 @@ public class TimeSlot {
     @Override
     public String toString() {
         return "Day of week: " + dayOfWeek +
-                "\n Duration: " + startingTime.toString() + "-" + endingTime.toString() +
+                "\n Duration: " + startingTime + "-" + endingTime +
                 "\n Module Code: " + moduleCode +
                 "\n Class Type: " + classType;
     }
