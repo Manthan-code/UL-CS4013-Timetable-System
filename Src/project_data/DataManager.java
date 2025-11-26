@@ -1,13 +1,15 @@
 package project_data;
 
 import java.io.*;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import project_classes.Lecturer;
-import project_classes.Room;
+import project_classes.*;
 import project_classes.Module;
-import project_classes.TimeSlot;
 import project_io.CSVReader;
+import project_classes.TimetableEntry;
+import project_classes.TimeSlot;
 
 
 public class DataManager {
@@ -74,33 +76,32 @@ public class DataManager {
      * @return List of Timeslots from CSV file
      */
 
-    public static List<TimeSlot> loadTimeSlots(String filepath) {
+    public static List<TimetableEntry> loadTimeSlots(String filepath) {
 
-            List<TimeSlot> slots = new ArrayList<>();
+            List<TimetableEntry> entries = new ArrayList<>();
             List<String[]> rows = CSVReader.readCSV(filepath);
 
             for (String[] row : rows) {
                 if (row.length > 8) {
                     try {
                         String dayOfWeek = row[0].trim();
-                        String startTime = row[1].trim();
-                        String endTime   = row[2].trim();
+                        LocalTime startTime = LocalTime.parse(row[1]);
+                        LocalTime endTime = LocalTime.parse(row[2]);
                         String moduleCode= row[3].trim();
                         String roomCode  = row[4].trim();
                         String classType = row[5].trim();
-
+                        String lecturer = row[6].trim();
                         // Parse integers safely
                         int startWeek = parseIntSafe(row[7]);
                         int endWeek   = parseIntSafe(row[8]);
 
-                        slots.add(new TimeSlot(dayOfWeek, startTime, endTime,
-                                moduleCode, roomCode, classType,
-                                startWeek, endWeek));
+                        entries.add(new TimetableEntry(dayOfWeek, new TimeSlot(startTime,endTime),
+                                moduleCode, roomCode, classType, lecturer,startWeek, endWeek));
                     } catch (Exception e) {
                         System.err.println("Skipping invalid row: " + Arrays.toString(row));
                     }
                 }
             }
-            return slots;
+            return entries;
         }
     }
