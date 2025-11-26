@@ -1,75 +1,50 @@
 package project_io;
 
-
-import java.util.*;
-import java.io.*;
-
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CSVReader {
-    private Scanner input;
-    /**
-     * Class to read data from a CSV file
-     */
 
     /**
-     * Constructor to make CSVWriter object
+     * Reads CSV file and returns rows via String arrays
+     * @param filepath The path for CSV file
+     * @return List where each entry is a String[] representing a row.
      */
+    public static List<String[]> readCSV(String filepath) {
+        List<String[]> data = new ArrayList<>();
 
-    public CSVReader() {
-        super();
-    }
-
-    /**
-     * Makes an input file from a file name
-     * @param filename String name of the file
-     * @throws FileNotFoundException Thrown when the file isn't found
-     */
-    public CSVReader(String filename) throws FileNotFoundException {
-        try {
-            input = new Scanner(new File(filename));
-        }  catch (FileNotFoundException e) {
-            System.err.println("File " + filename + " not found.");
-        }
-    }
-
-    /**
-     * Reads a line fron a CSV file and splits it at ','.
-     * @return An array of Strings with the tokens.
-     */
-    public String[] getValues() {
-        if (input.hasNextLine()) {
-            String Line = input.nextLine();
-            return Line.split(",");
-        } else {
-            return new String[0]; // Return an empty array if no more Lines
-
-        }
-    }
-
-    /**
-     * Reads the CSV file line by line and places the lines in a list
-     * @param filePath The file path of the CSV file
-     * @return ArrayList of lines in the CSV file.
-     */
-
-    public static List<String[]> readCSV(String filePath) {
-        // List of rows in the CSV file
-        List<String[]> rows = new ArrayList<>();
-
-        try {
-
-            // Setup for reading lines in the CSV file
-            BufferedReader br = new BufferedReader(new FileReader(filePath));
+        // Trying to read each orw of CSV file
+        try (BufferedReader br = new BufferedReader(new FileReader(filepath))) {
             String line;
 
-            // Reading lines in the CSV files with "," seperator for data in rows
+            // Reading every line
             while ((line = br.readLine()) != null) {
-                String[] fields = line.split(",");
-                rows.add(fields);
+
+                // Skip empty lines
+                if (line.trim().isEmpty()) {
+                    continue;
                 }
-            } catch (IOException e) {
-                System.out.println("Error reading CSV: " + e.getMessage());
+
+                // Splitting by comma
+                String[] values = line.split(",");
+
+                // Trimming whitespace or every value
+                for (int i = 0; i < values.length; i++) {
+                    values[i] = values[i].trim();
+                }
+
+                data.add(values);
             }
-            return rows;
+        } catch (IOException e) {
+            System.err.println("Error reading CSV file '" + filepath + "': " + e.getMessage());
         }
+
+        return data;
     }
+}
+
+
+
