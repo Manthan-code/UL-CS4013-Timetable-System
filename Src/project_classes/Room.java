@@ -1,6 +1,6 @@
 package project_classes;
 
-import java.util.Random;
+import java.util.*;
 
 public class Room {
     private String roomType;
@@ -27,10 +27,8 @@ public class Room {
         }
     }
 
-    public Room(String roomType, int maxCapacity, String roomCode) {
-        this.roomType = roomType;
-        this.maxCapacity = maxCapacity;
-        this.roomCode = roomCode;
+    public Room(String roomCode) {
+            this.roomCode = roomCode;
     }
 
     /**
@@ -89,5 +87,30 @@ public class Room {
      */
     double getHours() {
         return hours;
+    }
+
+    /**
+     * Checks if two rooms are the aame based on the code
+     * @param o   the reference object with which to compare.
+     * @return Boolean on whether the two rooms are the same
+     */
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Room room = (Room) o;
+        // Two rooms are equal if their IDs are the same
+        return Objects.equals(roomCode, room.roomCode);
+    }
+
+    /**
+     * Gets the hashCode of Module object
+     * @return int hashCode of a Room object
+     */
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(roomCode);
     }
 }

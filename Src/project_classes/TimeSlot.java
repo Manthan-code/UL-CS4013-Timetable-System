@@ -1,6 +1,5 @@
 package project_classes;
 
-import java.time.LocalTime;
 
 public class TimeSlot {
 
