@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-    public class TimetableManager {
+public class TimetableManager {
     private ArrayList<TimeSlot> timeTableEntries;
 
     public TimetableManager() {
