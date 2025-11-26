@@ -6,86 +6,101 @@ import java.util.*;
 import project_classes.Lecturer;
 import project_classes.Room;
 import project_classes.Module;
+import project_classes.TimeSlot;
 import project_io.CSVReader;
 
 
 public class DataManager {
+
+
+        // Method which safely handles errors reading int values
+        private static int parseIntSafe(String value) {
+            try {
+                return Integer.parseInt(value.trim());
+            } catch (NumberFormatException e) {
+                return 0;
+            }
+        }
+
     /**
-     * Class that will manage data from CSV files
+     * Returns the list of rooms read from CSV file
+     * @param filepath String file path of CSV file
+     * @return List of rooms from CSV file (without duplicates)
      */
 
-    public DataManager() {
+    public static Set<Room> loadRooms(String filepath) {
+           // Set of rooms from CSV file
+            Set<Room> rooms = new HashSet<>();
 
-    }
+            // Getting rows from CSV file
+            List<String[]> rows = CSVReader.readCSV(filepath);
 
-    /**
-     * Creates room objects from CSV file
-     * @return List of rooms made from CSV file
-     */
+            // Looping through rows
+            for (String[] row : rows) {
 
-    public static List<Room> loadRooms(String filename){
-        // List of rooms
-        List<Room> rooms = new ArrayList<>();
-        // Try and read the CSV rooms file
-        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
-            String line;
-            boolean isHeader = true;
-            // To skip the first line
-            while ((line = br.readLine()) != null) {
-                if (isHeader) { isHeader = false; continue; }
-
-                String[] values = line.split(",");
-                // If there is at least one row representing a room
-                if (values.length >= 4) {
-                    String roomType = values[0].trim();
-                    int maxCapacity = Integer.parseInt(values[1].trim());
-                    String roomCode = values[2].trim();
-                    double hours = Double.parseDouble(values[3].trim());
-                    rooms.add(new Room(roomType, maxCapacity, roomCode, hours));
+                if (row.length > 4) {
+                    String roomCode = row[4].trim();
+                    rooms.add(new Room(roomCode));
                 }
             }
-        } catch (IOException | NumberFormatException e) {
-            System.err.println("Error loading rooms: " + e.getMessage());
+            return rooms;
         }
-        return rooms;
-    }
 
     /**
-     * Creates module objects from CSV file
-     * @return List of modules created from CSV file
+     * Returns the list of modules read from CSV file
+     * @param filepath String file path of CSV file
+     * @return List of modules from CSV file (without duplicates)
      */
 
-    public static List<Module> loadModules(String filename){
-        List<Module> modules = new ArrayList<>();
-        // Try to read the file from the
-        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
-            String line;
-            boolean isHeader = true;
-            while ((line = br.readLine()) != null) {
-                if (isHeader) { isHeader = false; continue; }
+        public static Set<Module> loadModules(String filepath) {
+            // Set of modules from CSV files
+            Set<Module> modules = new HashSet<>();
 
-                String[] values = line.split(",");
-                if (values.length >= 5) {
-                    String moduleCode = values[0].trim();
-                    String name = values[1].trim();
-                    double lectureHours = Double.parseDouble(values[2].trim());
-                    double tutHours = Double.parseDouble(values[3].trim());
-                    double labHours = Double.parseDouble(values[4].trim());
-                    modules.add(new Module(moduleCode, name,lectureHours, tutHours, labHours));
+            List<String[]> rows = CSVReader.readCSV(filepath);
+
+            for (String[] row : rows) {
+                if (row.length > 6) {
+                    String moduleCode = row[4].trim();
+                    String lecturer = row[6].trim();
+                    modules.add(new Module(moduleCode, lecturer));
                 }
             }
-        } catch (IOException | NumberFormatException e) {
-            System.err.println("Error loading modules: " + e.getMessage());
+            return modules;
         }
-        return modules;
 
-    }
     /**
-     * Saves all the data loaded from the CSV files
+     * Gets list of timeslots ferom CSV File
+     * @param filepath String file path of CSV file
+     * @return List of Timeslots from CSV file
      */
 
-    public void saveAllData() {
-        //will save updated timetables + modules + rooms
-    }
+    public static List<TimeSlot> loadTimeSlots(String filepath) {
 
-}
+            List<TimeSlot> slots = new ArrayList<>();
+            List<String[]> rows = CSVReader.readCSV(filepath);
+
+            for (String[] row : rows) {
+                if (row.length > 8) {
+                    try {
+                        String dayOfWeek = row[0].trim();
+                        String startTime = row[1].trim();
+                        String endTime   = row[2].trim();
+                        String moduleCode= row[3].trim();
+                        String roomCode  = row[4].trim();
+                        String classType = row[5].trim();
+
+                        // Parse integers safely
+                        int startWeek = parseIntSafe(row[7]);
+                        int endWeek   = parseIntSafe(row[8]);
+
+                        slots.add(new TimeSlot(dayOfWeek, startTime, endTime,
+                                moduleCode, roomCode, classType,
+                                startWeek, endWeek));
+                    } catch (Exception e) {
+                        System.err.println("Skipping invalid row: " + Arrays.toString(row));
+                    }
+                }
+            }
+            return slots;
+        }
+    }
