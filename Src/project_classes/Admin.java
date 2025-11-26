@@ -1,22 +1,20 @@
 package project_classes;
 
-public class Admin extends User{
+public class Admin extends User {
 
-
-    public Admin(String name, String id, Role role, String password) {
-        super(name, id, role, password);
+    public Admin(String userId, String name, String username, String password) {
+        super(userId, name, username, password);
     }
 
-    @Override
-	public void displayDashboard() {
-		// TODO Auto-generated method stub
-		
-	}
+    public void addTimetableEntry(TimetableManager manager, TimeSlot entry) {
+        manager.addEntry(entry);
+    }
 
-	@Override
-	public void viewTimetable() {
-		// TODO Auto-generated method stub
-		
-	}
-	
+    public void removeTimetableEntry(TimetableManager manager, TimeSlot entry) {
+        manager.removeEntry(entry);
+    }
+
+    public void updateTimetableEntry(TimetableManager manager, TimeSlot oldEntry, TimeSlot newEntry) {
+        manager.updateEntry(oldEntry, newEntry);
+    }
 }

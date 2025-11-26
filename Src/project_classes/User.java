@@ -1,46 +1,26 @@
 package project_classes;
 
 public abstract class User {
-	//general user attributes that i think we need	
-	
-	enum Role {
-		ADMIN,
-		STUDENT,
-		LECTURER
-	}
-	
-	private String name;
-	private String id;
-	private Role role; //using enum
-	private String password;
-	
-	//constructor
-	public User(String name, String id, Role role, String password) {
-		this.name = name;
-		this.id = id;
-		this.role = role;
-		this.password = password;
-	}
-	
-	//get and set
-	public String getName() {
-		return name;
-	}
-	public String getId() {
-		return id;
-	}
-	public Role getRole() {
-		return role;
-	}
-	
-	public void setPassword(String newPassword) {
-        this.password = newPassword;
+    protected String userId;
+    protected String name;
+    protected String username;
+    protected String password;
+
+    public User(String userId, String name, String username, String password) {
+        this.userId = userId;
+        this.name = name;
+        this.username = username;
+        this.password = password;
     }
-	
-	
-	//will make these functions in subclasses
-	public abstract void displayDashboard();
-    public abstract void viewTimetable();
-    
-    
+
+    public String getUserId() { return userId; }
+    public String getName() { return name; }
+    public String getUsername() { return username; }
+
+    // All users can view a timetable
+    public void viewTimetable(TimetableManager manager) {
+        for (TimeSlot entry : manager.getEntries()) {
+            System.out.println(entry);
+        }
+    }
 }
