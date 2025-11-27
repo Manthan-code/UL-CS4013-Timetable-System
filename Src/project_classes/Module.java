@@ -9,12 +9,12 @@ import java.util.Objects;
  */
 public class Module {
 
-    private String moduleCode;        // e.g., "CS4013"
-    private String moduleName;        // e.g., "Software Development"
-    private double lectureHours;      // weekly lecture hours
-    private double labHours;          // weekly lab hours
-    private double tutorialHours;
-    private String lecturer;// weekly tutorial hours
+    private String moduleCode;
+    private String moduleName;
+    private double ReqlectureHours;
+    private double ReqlabHours;
+    private double ReqtutorialHours;
+    private String lecturer;
 
     public Module(String moduleCode,String lecturer) {
         this.moduleCode = moduleCode;
@@ -51,9 +51,9 @@ public class Module {
 
         this.moduleCode = moduleCode;
         this.moduleName = moduleName;
-        this.lectureHours = lectureHours;
-        this.labHours = labHours;
-        this.tutorialHours = tutorialHours;
+        ReqlectureHours = lectureHours;
+        ReqlabHours = labHours;
+        ReqtutorialHours = tutorialHours;
     }
 
     // ===========================
@@ -68,16 +68,16 @@ public class Module {
         return moduleName;
     }
 
-    public double getLectureHours() {
-        return lectureHours;
+    public double getReqLectureHours() {
+        return ReqlectureHours;
     }
 
-    public double getLabHours() {
-        return labHours;
+    public double getReqLabHours() {
+        return ReqlabHours;
     }
 
-    public double getTutorialHours() {
-        return tutorialHours;
+    public double getReqTutorialHours() {
+        return ReqtutorialHours;
     }
 
     // ===========================
@@ -93,7 +93,7 @@ public class Module {
     }
 
     public void setLectureHours(double lectureHours) {
-        this.lectureHours = lectureHours;
+        this.ReqlectureHours = lectureHours;
     }
 
     public void setLabHours(double labHours) {
