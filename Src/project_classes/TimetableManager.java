@@ -119,11 +119,12 @@ public class TimetableManager {
                 String room = p[4];
                 String type = p[5];
                 String lecturer = p[6];
-                int startW = Integer.parseInt(p[7]);
-                int endW = Integer.parseInt(p[8]);
+                String studentGroup = p[7];
+                int startW = Integer.parseInt(p[8]);
+                int endW = Integer.parseInt(p[9]);
 
                 TimeSlot slot = new TimeSlot(start, end);
-                TimetableEntry entry = new TimetableEntry(day, slot, module, room, type, lecturer, startW, endW);
+                TimetableEntry entry = new TimetableEntry(day, slot, module, room, type, lecturer,studentGroup, startW, endW);
 
                 entries.add(entry);
             }

@@ -129,6 +129,9 @@ public class CLILauncher {
         System.out.print("Enter lecturer name: ");
         String lecturer = scanner.nextLine();
 
+        System.out.println("Enter the student Group: ");
+        String studentGroup = scanner.nextLine();
+
         // Get start and end week from user
         System.out.print("Enter start week (e.g., 1): ");
         int startWeek = Integer.parseInt(scanner.nextLine());
@@ -142,7 +145,7 @@ public class CLILauncher {
             LocalTime endTime = LocalTime.parse(endStr);
 
             TimetableEntry newEntry = new TimetableEntry(
-                    day, new TimeSlot(startTime, endTime), module, room, type, lecturer, startWeek, endWeek);
+                    day, new TimeSlot(startTime, endTime), module, room, type, lecturer,studentGroup, startWeek, endWeek);
 
             // Add to Manager (checks for conflicts automatically)
             boolean success = manager.addEntry(newEntry);
