@@ -6,15 +6,15 @@ public class Admin extends User {
         super(userId, name, username, password);
     }
 
-    public void addTimetableEntry(TimetableManager manager, TimeSlot entry) {
+    public void addTimetableEntry(TimetableManager manager, TimetableEntry entry) {
         manager.addEntry(entry);
     }
 
-    public void removeTimetableEntry(TimetableManager manager, TimeSlot entry) {
+    public void removeTimetableEntry(TimetableManager manager, TimetableEntry entry) {
         manager.removeEntry(entry);
     }
 
-    public void updateTimetableEntry(TimetableManager manager, TimeSlot oldEntry, TimeSlot newEntry) {
+    public void updateTimetableEntry(TimetableManager manager, TimetableEntry oldEntry, TimetableEntry newEntry) {
         manager.updateEntry(oldEntry, newEntry);
     }
 }
