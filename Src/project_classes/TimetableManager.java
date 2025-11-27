@@ -161,4 +161,86 @@ public class TimetableManager {
             System.out.println("Error saving CSV: " + e.getMessage());
         }
     }
+
+    public void printWeeklyGrid() {
+
+        String[] days = {"Mon", "Tue", "Wed", "Thu", "Fri"};
+
+        //this determines the range of the timetable so from 9:00 to 18:00
+        LocalTime earliest = LocalTime.of(9, 0);
+        LocalTime latest = LocalTime.of(18, 0);
+
+        int cellWidth = 30;
+        int cellHeight = 3;  // 3 lines per cell
+
+        //prints header row
+        System.out.print(pad("Time", cellWidth));
+        for (String d : days)
+            System.out.print("| " + pad(d, cellWidth - 2));
+        System.out.println();
+        System.out.println("-".repeat(cellWidth + days.length * cellWidth));
+
+        //prints rest of the rows
+        for (LocalTime time = earliest; time.isBefore(latest); time = time.plusHours(1)) {
+
+            //build text for each cell first
+            String[][] cellLines = new String[days.length][cellHeight];
+            for (int i = 0; i < days.length; i++) {
+
+                String fullText = getCellValue(days[i], time);
+                String[] lines = fullText.split("\n");
+
+                for (int l = 0; l < cellHeight; l++) {
+                    if (l < lines.length) {
+                        cellLines[i][l] = pad(lines[l], cellWidth - 2);
+                    } else {
+                        cellLines[i][l] = pad("", cellWidth - 2);
+                    }
+                }
+            }
+
+            for (int line = 0; line < cellHeight; line++) {
+
+                if (line == 0)
+                    System.out.print(pad(time.toString(), cellWidth));
+                else
+                    System.out.print(pad("", cellWidth));
+
+                for (int i = 0; i < days.length; i++) {
+                    System.out.print("| " + cellLines[i][line]);
+                }
+
+                System.out.println();
+            }
+
+            System.out.println("-".repeat(cellWidth + days.length * cellWidth));
+        }
+    }
+
+    private String getCellValue(String day, LocalTime time) {
+        for (TimetableEntry e : entries) {
+
+            if (!e.getDay().equalsIgnoreCase(day))
+                continue;
+
+            LocalTime start = e.getTimeSlot().getStartTime();
+            LocalTime end   = e.getTimeSlot().getEndTime();
+
+            if (!time.isBefore(start) && time.isBefore(end)) {
+
+                return e.getModuleCode() + " (" + e.getRoomCode() + ")\n" +
+                        e.getClassType() + " - " + e.getLecturerName() + "\n" +
+                        "W" + e.getStartWeek() + "–" + e.getEndWeek();
+            }
+        }
+
+        return "";
+    }
+
+    private String pad(String text, int width) {
+        if (text.length() >= width) return text.substring(0, width - 1);
+        return String.format("%-" + width + "s", text);
+    }
+
+
 }

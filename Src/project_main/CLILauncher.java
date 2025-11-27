@@ -78,7 +78,7 @@ public class CLILauncher {
      */
 
     private static void viewAllTimetables() {
-        manager.printAll();
+        manager.printWeeklyGrid();
     }
 
     /**
