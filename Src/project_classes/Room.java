@@ -31,6 +31,12 @@ public class Room {
             this.roomCode = roomCode;
     }
 
+    public Room(String roomType, int maxCapacity, String roomCode) {
+        this.roomType = roomType;
+        this.maxCapacity = maxCapacity;
+        this.roomCode = roomCode;
+    }
+
     /**
      * Method to set and get the roomID for s room based on the room's maxCapacity
      * maxCapacity thresholds are based on average lab/lecture/tutorial room sizes in UL.
