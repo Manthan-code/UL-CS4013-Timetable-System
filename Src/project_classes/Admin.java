@@ -1,49 +1,20 @@
 package project_classes;
 
-import project_data.DataManager;
+public class Admin extends User {
 
-import java.util.List;
-import java.util.Set;
-
-public class Admin extends User{
-
-    private Set <Module> modulesList;
-
-
-    public Admin(String name, String id) {
-        super(name, id);
-        modulesList = DataManager.loadModules("modules.csv");
-
+    public Admin(String userId, String name, String username, String password) {
+        super(userId, name, username, password);
     }
 
-    public void enrollInModule(Module newModule) {
-        if (!(modulesList.contains(newModule))) {
-            modulesList.add(newModule);
-        }
+    public void addTimetableEntry(TimetableManager manager, TimetableEntry entry) {
+        manager.addEntry(entry);
     }
 
-    public void dropModule(Module chosenModule) {
-        modulesList.remove(chosenModule);
+    public void removeTimetableEntry(TimetableManager manager, TimetableEntry entry) {
+        manager.removeEntry(entry);
     }
 
-    /**
-     * Displays the timetable dashboard to th user on the screen.
-     */
-
-    @Override
-	public void displayDashboard() {
-		// TODO Auto-generated method stub
-
-	}
-
-    /**
-     * Allows user to view the timetable.
-     */
-
-	@Override
-	public void viewTimetable() {
-		// TODO Auto-generated method stub
-
-	}
-	
+    public void updateTimetableEntry(TimetableManager manager, TimetableEntry oldEntry, TimetableEntry newEntry) {
+        manager.updateEntry(oldEntry, newEntry);
+    }
 }
