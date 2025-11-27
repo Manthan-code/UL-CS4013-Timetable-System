@@ -12,14 +12,13 @@ public class Room {
     public Room(String roomType, int maxCapacity, String roomCode, double hours) {
 
         // Check to see if roomType is valid - E.g. Either "lec" or "LEC"
-        if(roomType.equalsIgnoreCase("LEC") || roomType.equalsIgnoreCase("LAB")
-                || roomType.equalsIgnoreCase("TUT")) {
+        if(roomType.equalsIgnoreCase("CLASS") || roomType.equalsIgnoreCase("LAB")) {
             this.roomType = roomType;
             this.maxCapacity = maxCapacity;
             this.roomCode = roomCode;
             this.hours = hours;
         } else {
-            // Set to "Unknown" if user enters anything other than lec/LEC,lab/LAB or tut/TUT
+            // Set to "Unknown" if user enters anything other than class/CLASS or lab/LAB
             this.roomType = "Unknown";
             this.maxCapacity = maxCapacity;
             this.roomCode = roomCode;
