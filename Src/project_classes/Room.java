@@ -38,34 +38,6 @@ public class Room {
     }
 
     /**
-     * Method to set and get the roomID for s room based on the room's maxCapacity
-     * maxCapacity thresholds are based on average lab/lecture/tutorial room sizes in UL.
-     * Could help when allocating lab/tutorial groups to rooms ?
-     * @param maxCapacity The max capacity of a room
-     * @return The String representing the room's max capacity that has either "LAB","LEC" or "TUT"
-     * and a random digit from 0-100
-     */
-
-    public String getRoomID(int maxCapacity) {
-        String roomID = "";
-        // Generates random digit between 0-100
-        String randomNum = new Random().nextInt(100)+"";
-        if(roomType.equalsIgnoreCase("LAB") && maxCapacity <= 40) {
-            roomID = "LAB" + randomNum;
-        } else if(roomType.equalsIgnoreCase("TUT") && maxCapacity <= 60) {
-            roomID = "TUT" + randomNum;
-        } else if(roomType.equalsIgnoreCase("LEC") && maxCapacity > 60) {
-            roomID = "LEC" + randomNum;
-        } else if(roomType.equalsIgnoreCase("Unknown")) {
-            roomID = randomNum;
-        }
-
-        return roomID;
-
-    }
-
-
-    /**
      * returns the type of room
      * @return String roomType
      */
@@ -95,8 +67,42 @@ public class Room {
         return hours;
     }
 
+
     /**
-     * Checks if two rooms are the aame based on the code
+     * Sets the type of room for a room object
+     * @param roomType String room type
+     */
+
+    public void setRoomType(String roomType){
+        this.roomType = roomType;
+    }
+
+    /**
+     * Sets the max capacity of a room
+     * @param maxCapacity Int max capacity of a room
+     */
+    public void setMaxCapacity(int maxCapacity){
+        this.maxCapacity = maxCapacity;
+    }
+
+    /**
+     * Sets the room code for a room
+     * @param roomCode String code of a room
+     */
+    public void setRoomCode(String roomCode){
+        this.roomCode = roomCode;
+    }
+
+    /**
+     * Sets the hours for a room
+     * @param hours Double hours for a room
+     */
+    public void setHours(double hours){
+        this.hours = hours;
+    }
+
+    /**
+     * Checks if two rooms are the same based on the code
      * @param o   the reference object with which to compare.
      * @return Boolean on whether the two rooms are the same
      */

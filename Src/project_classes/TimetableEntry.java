@@ -91,8 +91,8 @@ public class TimetableEntry {
      */
 
     public String toString() {
-        return day + " " + timeSlot + " " + moduleCode + " " + roomCode +
-                " (" + classType + ") - " + lecturerName +
-                " Weeks " + startWeek + "-" + endWeek;
+        return String.format("%s %s | %s | %s | %s | %s | %s | %d-%d",
+                day, timeSlot, moduleCode, roomCode, classType, lecturerName,
+                studentGroup,startWeek, endWeek);
     }
 }
