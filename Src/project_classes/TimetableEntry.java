@@ -16,7 +16,7 @@ public class TimetableEntry {
     private int endWeek;
 
     public TimetableEntry(String day, TimeSlot timeSlot, String moduleCode,
-                          String roomCode, String classType, String lecturerName,String studentGroup,
+                          String roomCode, String classType, String lecturerName, String studentGroup,
                           int startWeek, int endWeek) {
 
         this.day = day;
@@ -41,58 +41,61 @@ public class TimetableEntry {
     public int getStartWeek() { return startWeek; }
     public int getEndWeek() { return endWeek; }
 
-
     /**
-     * Checks if two timetable entries clash based on either day,startWeek,endWeek,timeslots ,
-     * rooms ,lecturers and student groups
-     * @param other The timetable entry to be checked
-     * @return True if the entries clash in any way ,false otherwise.
+     * Checks if two timetable entries clash.
+     * Real conflict means:
+     *  - Same day
+     *  - Weeks overlap
+     *  - Times overlap
+     *  - AND at least one of:
+     *      * same room
+     *      * same lecturer
+     *      * same student group (or "All")
      */
-    // Basic time conflict
     public boolean timeConflictsWith(TimetableEntry other) {
-        // Check if days overlap
-        if (this.day.equalsIgnoreCase(other.day)) return true;
 
-        // Check if the start and end weeks overlap
+        // 1. Same day
+        if (!this.day.equalsIgnoreCase(other.day)) {
+            return false;
+        }
+
+        // 2. Weeks overlap
         boolean weeksOverlap = !(this.endWeek < other.startWeek ||
                 other.endWeek < this.startWeek);
-        if (weeksOverlap) return true;
+        if (!weeksOverlap) {
+            return false;
+        }
 
-        // Check if the timeslots overlap with each other
-        if (this.timeSlot.overlaps(other.timeSlot)) return true;
+        // 3. Times overlap
+        if (!this.timeSlot.overlaps(other.timeSlot)) {
+            return false;
+        }
 
-        // Check if the rooms overlap with each other
-        if(this.roomCode.equalsIgnoreCase(other.roomCode)) return true;
+        // 4. Entity clash: room OR lecturer OR group
+        boolean roomClash = this.roomCode.equalsIgnoreCase(other.roomCode);
+        boolean lecturerClash = this.lecturerName.equalsIgnoreCase(other.lecturerName);
+        boolean groupClash = isGroupConflict(this.studentGroup, other.studentGroup);
 
-        // Check if the lecturers overlap with each other
-        if (this.lecturerName.equalsIgnoreCase(other.lecturerName)) return true;
-
-        // Check if student groups overlap
-        return isGroupConflict(this.studentGroup, other.studentGroup);
+        return roomClash || lecturerClash || groupClash;
     }
 
     /**
-     * Checks if two student groups are equal
-     * @param g1 String student group id
-     * @param g2 String student group id
-     * @return True if the two groups are the same + vice versa
+     * Checks if two student groups are in conflict.
+     * "All" conflicts with everyone, otherwise equal groups conflict.
      */
-
     private boolean isGroupConflict(String g1, String g2) {
+        if (g1 == null || g2 == null) return false;
 
-        // "All" conflicts with everyone. "Group A" conflicts with "Group A" (but not B).
         if (g1.equalsIgnoreCase("All") || g2.equalsIgnoreCase("All")) return true;
         return g1.equalsIgnoreCase(g2);
     }
 
     /**
-     * Outputs string version of a timeslot
-     * @return String details of a timeslot
+     * Outputs string version of a timetable entry
      */
-
     public String toString() {
-        return day + " " + timeSlot + " " + moduleCode + " " + roomCode +
-                " (" + classType + ") - " + lecturerName +
-                " Weeks " + startWeek + "-" + endWeek;
+        return String.format("%s %s | %s | %s | %s | %s | %s | %d-%d",
+                day, timeSlot, moduleCode, roomCode, classType, lecturerName,
+                studentGroup, startWeek, endWeek);
     }
 }
