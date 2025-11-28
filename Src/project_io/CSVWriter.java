@@ -1,16 +1,21 @@
 package project_io;
-import java.util.ArrayList;
-public class CSVWriter {
-    /**
-     * Class to write data into a CSV file
-     */
-    //constructor
-    public CSVWriter() {
-        //future options: append mode, overwrite mode, etc.
-    }
 
-    //basic write placeholder
-    public void writeCSV(String filename, ArrayList<String[]> data) {
-        //will implement writing logic later
+import java.io.*;
+import java.util.List;
+
+public class CSVWriter {
+
+    public static void writeCSV(String filePath, List<String[]> rows) {
+
+        try (PrintWriter pw = new PrintWriter(new FileWriter(filePath))) {
+
+            for (String[] row : rows) {
+                pw.println(String.join(",", row));
+            }
+
+        } catch (IOException e) {
+            System.out.println("Error: Could not write CSV file: " + filePath);
+            System.out.println(e.getMessage());
+        }
     }
 }
