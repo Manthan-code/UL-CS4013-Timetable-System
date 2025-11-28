@@ -1,39 +1,50 @@
 package project_classes;
 
-public abstract class User {
-	private String name;
-	private String id;
-	
-	/*** 
-     * User constructor, takes in basic info about a person
-     * */
-	//constructor
-	public User(String name, String id) {
-		this.name = name;
-		this.id = id;
-	}
-	
-	//get and set
-/***
- * returns name
+/**
+ * Simple User model for login and role handling.
+ * Roles: admin, lecturer, student
+ *
+ * Extra:
+ *  - For admin: "-"
+ *  - For lecturer: lecturer name (e.g. "Dr. Smith")
+ *  - For student: student group / course code (e.g. "CS1A")
  */
-	public String getName() {
-		return name;
-	}
-	/***
-	 * returns ID
-	 */
-	public String getId() {
-		return id;
-	}
+public class User {
 
-	
-	/***
-	 * empty abstract CLI methods
-	 */
-	//will make these functions in subclasses
-	public abstract void displayDashboard();
-    public abstract void viewTimetable();
-    
-    
+    private String email;
+    private String password;
+    private String role;   // "admin", "lecturer", "student"
+    private String extra;  // lecturerName or studentGroup or "-"
+
+    public User(String email, String password, String role, String extra) {
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.extra = extra;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    // Usually not needed after login, but kept for completeness
+    public String getPassword() {
+        return password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public String getExtra() {
+        return extra;
+    }
+
+    public String toString() {
+        return "User{" +
+                "email='" + email + '\'' +
+                ", role='" + role + '\'' +
+                ", extra='" + extra + '\'' +
+                '}';
+    }
 }
