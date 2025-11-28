@@ -1,0 +1,82 @@
+package project_classes;
+
+import project_io.CSVReader;
+import java.util.List;
+import java.util.Scanner;
+
+/**
+ * Handles user login using users.csv
+ * Uses CSVReader for simple CSV loading.
+ */
+public class LoginPrompt {
+
+    private String usersFilePath;
+
+    public LoginPrompt(String usersFilePath) {
+        this.usersFilePath = usersFilePath;
+    }
+
+    /**
+     * Main login flow.
+     */
+    public User login(Scanner scanner) {
+        int attempts = 0;
+
+        while (attempts < 3) {
+            System.out.println("\n--- Login ---");
+            System.out.print("Enter email (or 'q' to cancel): ");
+            String email = scanner.nextLine().trim();
+
+            if (email.equalsIgnoreCase("q")) {
+                System.out.println("Login cancelled.");
+                return null;
+            }
+
+            System.out.print("Enter password: ");
+            String password = scanner.nextLine().trim();
+
+            User user = findUser(email, password);
+
+            if (user != null) {
+                System.out.println("Login successful. Logged in as: " + user.getRole());
+                return user;
+            }
+
+            System.out.println("Invalid email or password.");
+            attempts++;
+        }
+
+        System.out.println("Too many failed attempts.");
+        return null;
+    }
+
+    /**
+     * Searches for a user row inside users.csv
+     */
+    private User findUser(String email, String password) {
+
+        List<String[]> rows = CSVReader.readCSV(usersFilePath);
+
+        if (rows.isEmpty()) {
+            System.out.println("Error: users file not found or empty.");
+            return null;
+        }
+
+        // Skip header
+        for (int i = 1; i < rows.size(); i++) {
+            String[] p = rows.get(i);
+            if (p.length < 4) continue;
+
+            String csvEmail = p[0].trim();
+            String csvPass = p[1].trim();
+            String csvRole = p[2].trim();
+            String csvExtra = p[3].trim();
+
+            if (email.equalsIgnoreCase(csvEmail) && password.equals(csvPass)) {
+                return new User(csvEmail, csvPass, csvRole, csvExtra);
+            }
+        }
+
+        return null;
+    }
+}

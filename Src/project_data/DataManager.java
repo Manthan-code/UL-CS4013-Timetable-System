@@ -1,119 +1,93 @@
 package project_data;
 
-import java.io.*;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
-
-import project_classes.*;
 import project_classes.Module;
+import project_classes.Room;
 import project_io.CSVReader;
-import project_classes.TimetableEntry;
-import project_classes.TimeSlot;
 
+import java.util.ArrayList;
+import java.util.List;
 
+/**
+ * Loads Room and Module information from CSV files.
+ * Uses CSVReader so no repeated file I/O code.
+ */
 public class DataManager {
 
-    // Cache these in memory so we don't read files constantly
-    private static Set<Room> validRooms = new HashSet<>();
-    private static Set<Module> validModules = new HashSet<>();
+    private List<Module> modules = new ArrayList<>();
+    private List<Room> rooms = new ArrayList<>();
 
+    public List<Module> getModules() {
+        return modules;
+    }
 
-        // Method which safely handles errors reading int values
-        private static int parseIntSafe(String value) {
+    public List<Room> getRooms() {
+        return rooms;
+    }
+
+    // ------------------------------------------------------------
+    // LOAD MODULES CSV
+    // ------------------------------------------------------------
+    public void loadModules(String filePath) {
+
+        modules.clear();
+        List<String[]> rows = CSVReader.readCSV(filePath);
+
+        if (rows.isEmpty()) {
+            System.out.println("Warning: Module file empty or missing: " + filePath);
+            return;
+        }
+
+        for (int i = 1; i < rows.size(); i++) { // skip header
+            String[] p = rows.get(i);
+            if (p.length < 5) continue;
+
             try {
-                return Integer.parseInt(value.trim());
-            } catch (NumberFormatException e) {
-                return 0;
+                String code = p[0].trim();
+                String name = p[1].trim();
+                int lec = Integer.parseInt(p[2].trim());
+                int lab = Integer.parseInt(p[3].trim());
+                int tut = Integer.parseInt(p[4].trim());
+
+                modules.add(new Module(code, name, lec, lab, tut));
+
+            } catch (Exception e) {
+                System.out.println("Bad module entry at row " + i);
             }
         }
 
-
-    /**
-     * Loads the reference data (Rooms and Modules)
-     */
-    public static void loadReferenceData() {
-        validRooms = loadRooms("rooms.csv");
-        validModules = loadModules("modules.csv");
-        System.out.println("Reference data loaded: " + validRooms.size() + " rooms, " + validModules.size() + " modules.");
+        System.out.println("Loaded " + modules.size() + " modules.");
     }
 
-    /**
-     * Returns the list of rooms read from CSV file
-     * @param filepath String file path of CSV file
-     * @return List of rooms from CSV file (without duplicates)
-     */
+    // ------------------------------------------------------------
+    // LOAD ROOMS CSV
+    // ------------------------------------------------------------
+    public void loadRooms(String filePath) {
 
-    public static Set<Room> loadRooms(String filepath) {
-            // Getting rows from CSV file
-            List<String[]> rows = CSVReader.readCSV(filepath);
+        rooms.clear();
+        List<String[]> rows = CSVReader.readCSV(filePath);
 
-            // Looping through rows
-            for (String[] row : rows) {
-
-                if (row.length >= 4) {
-                    String roomType = row[0].trim();
-                    int maxCapacity = Integer.parseInt(row[1].trim());
-                    String roomCode = row[2].trim();
-                    validRooms.add(new Room(roomType,maxCapacity,roomCode));
-                }
-            }
-            return validRooms;
+        if (rows.isEmpty()) {
+            System.out.println("Warning: Room file empty or missing: " + filePath);
+            return;
         }
 
-    /**
-     * Returns the list of modules read from CSV file
-     * @param filepath String file path of CSV file
-     * @return List of modules from CSV file (without duplicates)
-     */
+        for (int i = 1; i < rows.size(); i++) { // skip header
+            String[] p = rows.get(i);
+            if (p.length < 4) continue;
 
-        public static Set<Module> loadModules(String filepath) {
-            List<String[]> rows = CSVReader.readCSV(filepath);
+            try {
+                String type = p[0].trim();
+                int capacity = Integer.parseInt(p[1].trim());
+                String code = p[2].trim();
+                double hours = Double.parseDouble(p[3].trim());
 
-            for (String[] row : rows) {
-                if (row.length >= 2) {
-                    String moduleCode = row[0].trim();
-                    String lecturer = row[1].trim();
-                    validModules.add(new Module(moduleCode, lecturer));
-                }
+                rooms.add(new Room(type, capacity, code, hours));
+
+            } catch (Exception e) {
+                System.out.println("Bad room entry at row " + i);
             }
-            return validModules;
         }
 
-    /**
-     * Gets list of timeslots from CSV File
-     * @param filepath String file path of CSV file
-     * @return List of Timeslots from CSV file
-     */
-
-    public static List<TimetableEntry> loadTimeSlots(String filepath) {
-
-            List<TimetableEntry> entries = new ArrayList<>();
-            List<String[]> rows = CSVReader.readCSV(filepath);
-
-            for (String[] row : rows) {
-                if (row.length > 8) {
-                    try {
-                        String dayOfWeek = row[0].trim();
-                        LocalTime startTime = LocalTime.parse(row[1]);
-                        LocalTime endTime = LocalTime.parse(row[2]);
-                        String moduleCode= row[3].trim();
-                        String roomCode  = row[4].trim();
-                        String classType = row[5].trim();
-                        String lecturer = row[6].trim();
-                        String studentGroup = row[7].trim();
-
-                        // Parse integers safely
-                        int startWeek = parseIntSafe(row[8]);
-                        int endWeek   = parseIntSafe(row[9]);
-
-                        entries.add(new TimetableEntry(dayOfWeek, new TimeSlot(startTime,endTime),
-                                moduleCode, roomCode, classType, lecturer,studentGroup,startWeek, endWeek));
-                    } catch (Exception e) {
-                        System.err.println("Skipping invalid row: " + Arrays.toString(row));
-                    }
-                }
-            }
-            return entries;
-        }
+        System.out.println("Loaded " + rooms.size() + " rooms.");
     }
+}
