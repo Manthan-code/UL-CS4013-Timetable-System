@@ -1,10 +1,10 @@
+//module
+
 package project_classes;
 
 import java.util.Objects;
 
-/**
- * Represents a module in the timetable system.
- */
+
 public class Module {
 
     private String moduleCode;        // e.g., "CS4013"
@@ -13,16 +13,12 @@ public class Module {
     private double labHours;
     private double tutorialHours;
 
-    /**
-     * Basic constructor using only module code.
-     */
+    //moduleCode Constructor
     public Module(String moduleCode) {
         this.moduleCode = moduleCode;
     }
 
-    /**
-     * Main constructor used when loading full module info.
-     */
+    //main Constructor
     public Module(String moduleCode, String moduleName,
                   double lectureHours, double labHours, double tutorialHours) {
 
@@ -33,9 +29,7 @@ public class Module {
         this.tutorialHours = tutorialHours;
     }
 
-    // ===========================
-    // GETTERS
-    // ===========================
+    //Get Methods
 
     public String getModuleCode() { return moduleCode; }
     public String getModuleName() { return moduleName; }
@@ -43,9 +37,7 @@ public class Module {
     public double getLabHours() { return labHours; }
     public double getTutorialHours() { return tutorialHours; }
 
-    // ===========================
-    // SETTERS
-    // ===========================
+    //Set Methods
 
     public void setModuleCode(String moduleCode) { this.moduleCode = moduleCode; }
     public void setModuleName(String moduleName) { this.moduleName = moduleName; }
@@ -53,22 +45,7 @@ public class Module {
     public void setLabHours(double labHours) { this.labHours = labHours; }
     public void setTutorialHours(double tutorialHours) { this.tutorialHours = tutorialHours; }
 
-    // ===========================
-    // EQUALS + HASHCODE
-    // ===========================
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Module)) return false;
-        Module module = (Module) o;
-        return Objects.equals(moduleCode, module.moduleCode);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(moduleCode);
-    }
-
+    //toString
     @Override
     public String toString() {
         return "Module Code: " + moduleCode +

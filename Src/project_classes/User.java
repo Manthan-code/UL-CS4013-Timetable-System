@@ -1,35 +1,25 @@
 package project_classes;
 
-/**
- * Simple User model for login and role handling.
- * Roles: admin, lecturer, student
- *
- * Extra:
- *  - For admin: "-"
- *  - For lecturer: lecturer name (e.g. "Dr. Smith")
- *  - For student: student group / course code (e.g. "CS1A")
- */
+//user model
 public class User {
 
     private String email;
     private String password;
-    private String role;   // "admin", "lecturer", "student"
-    private String extra;  // lecturerName or studentGroup or "-"
+    private String role;
+    private String extra;   // lecturerName OR studentGroup OR "-" for admin
+    private String course;
 
-    public User(String email, String password, String role, String extra) {
+    public User(String email, String password, String role, String extra, String course) {
         this.email = email;
         this.password = password;
         this.role = role;
         this.extra = extra;
+        this.course = course;
     }
 
+    //getters
     public String getEmail() {
         return email;
-    }
-
-    // Usually not needed after login, but kept for completeness
-    public String getPassword() {
-        return password;
     }
 
     public String getRole() {
@@ -40,11 +30,16 @@ public class User {
         return extra;
     }
 
+    public String getCourse() {
+        return course;
+    }
+
     public String toString() {
         return "User{" +
                 "email='" + email + '\'' +
                 ", role='" + role + '\'' +
                 ", extra='" + extra + '\'' +
+                ", course='" + course + '\'' +
                 '}';
     }
 }
