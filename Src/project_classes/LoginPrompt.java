@@ -4,10 +4,6 @@ import project_io.CSVReader;
 import java.util.List;
 import java.util.Scanner;
 
-/**
- * Handles user login using users.csv
- * Uses CSVReader for simple CSV loading.
- */
 public class LoginPrompt {
 
     private String usersFilePath;
@@ -16,9 +12,7 @@ public class LoginPrompt {
         this.usersFilePath = usersFilePath;
     }
 
-    /**
-     * Main login flow.
-     */
+    // main login flow
     public User login(Scanner scanner) {
         int attempts = 0;
 
@@ -50,30 +44,29 @@ public class LoginPrompt {
         return null;
     }
 
-    /**
-     * Searches for a user row inside users.csv
-     */
+    // finds the user inside users.csv
     private User findUser(String email, String password) {
 
         List<String[]> rows = CSVReader.readCSV(usersFilePath);
 
         if (rows.isEmpty()) {
-            System.out.println("Error: users file not found or empty.");
+            System.out.println("Error: users CSV not found or empty.");
             return null;
         }
 
         // Skip header
         for (int i = 1; i < rows.size(); i++) {
             String[] p = rows.get(i);
-            if (p.length < 4) continue;
+            if (p.length < 5) continue;
 
             String csvEmail = p[0].trim();
             String csvPass = p[1].trim();
             String csvRole = p[2].trim();
             String csvExtra = p[3].trim();
+            String csvCourse = p[4].trim();
 
             if (email.equalsIgnoreCase(csvEmail) && password.equals(csvPass)) {
-                return new User(csvEmail, csvPass, csvRole, csvExtra);
+                return new User(csvEmail, csvPass, csvRole, csvExtra, csvCourse);
             }
         }
 

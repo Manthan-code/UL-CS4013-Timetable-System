@@ -1,27 +1,20 @@
-package project_classes;
+//Room
 
+package project_classes;
 import java.util.Objects;
 
-/**
- * Represents a room used in the timetable system.
- * Room types supported: LEC, LAB, TUT
- */
 public class Room {
-
-    private String roomType;     // LEC / LAB / TUT
+    private String roomType;
     private int maxCapacity;
     private String roomCode;
     private double hours;
 
     public Room(String roomType, int maxCapacity, String roomCode, double hours) {
-
-        // Accept only LEC / LAB / TUT
         if (roomType.equalsIgnoreCase("LEC") ||
                 roomType.equalsIgnoreCase("LAB") ||
                 roomType.equalsIgnoreCase("TUT")) {
 
             this.roomType = roomType.toUpperCase();
-
         } else {
             this.roomType = "UNKNOWN";
         }
@@ -30,7 +23,6 @@ public class Room {
         this.roomCode = roomCode;
         this.hours = hours;
     }
-
     public Room(String roomCode) {
         this.roomCode = roomCode;
     }
