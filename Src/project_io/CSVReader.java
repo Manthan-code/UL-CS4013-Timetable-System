@@ -6,8 +6,18 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-//main Reader Block
+
 public class CSVReader {
+    /**
+     * Class that handles CSV file reading via parsing
+     */
+
+
+    /**
+     * Reads the rwos fo data from a CSV file
+     * @param filePath String name of file path
+     * @return List of rows from the CSV file
+     */
     public static List<String[]> readCSV(String filePath) {
         List<String[]> rows = new ArrayList<>();
 

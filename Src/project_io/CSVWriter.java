@@ -6,6 +6,11 @@ import java.io.*;
 import java.util.List;
 
 public class CSVWriter {
+    /**
+     * Class that handles the writing data to a CSV file
+     * @param filePath String name of file path
+     * @param rows Array of rows from a CSV file
+     */
     public static void writeCSV(String filePath, List<String[]> rows) {
         try (PrintWriter pw = new PrintWriter(new FileWriter(filePath))) {
 

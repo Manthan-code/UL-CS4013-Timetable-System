@@ -5,11 +5,11 @@ import project_classes.Room;
 import project_io.CSVReader;
 import java.util.*;
 
-/**
- * Loads Modules, Rooms and Courses from CSV files.
- * This keeps all the data loading in one place so the CLI is cleaner.
- */
+
 public class DataManager {
+    /**
+     * Loads Modules, Rooms and Courses from CSV files.
+     */
 
     private List<Module> modules = new ArrayList<>();
     private List<Room> rooms = new ArrayList<>();
@@ -17,25 +17,31 @@ public class DataManager {
     // courseName -> list of module codes
     private Map<String, List<String>> courseMap = new HashMap<>();
 
+    /** Gets the list of modules from CSV file*/
     public List<Module> getModules() {
         return modules;
     }
 
+    /** Gets the list of rooms from CSV file*/
     public List<Room> getRooms() {
         return rooms;
     }
 
+
+    /** Gets the course names from CSV file*/
     public Set<String> getCourseNames() {
         return courseMap.keySet();
     }
 
+    /** Gets the modules for a course listed on the CSV file */
     public List<String> getModulesForCourse(String courseName) {
         return courseMap.getOrDefault(courseName, new ArrayList<>());
     }
 
-    // ------------------------------------------------------------
-    // LOAD MODULES CSV
-    // ------------------------------------------------------------
+    /**
+     * Loads the CSV file with details about modules
+     * @param filePath String name of file path
+     */
     public void loadModules(String filePath) {
 
         modules.clear();
@@ -66,9 +72,10 @@ public class DataManager {
         System.out.println("Loaded " + modules.size() + " modules.");
     }
 
-    // ------------------------------------------------------------
-    // LOAD ROOMS CSV
-    // ------------------------------------------------------------
+    /**
+     * Loads the CSV file with details about rooms
+     * @param filePath String name of file path
+     */
     public void loadRooms(String filePath) {
 
         rooms.clear();
@@ -99,9 +106,10 @@ public class DataManager {
         System.out.println("Loaded " + rooms.size() + " rooms.");
     }
 
-    // ------------------------------------------------------------
-    // LOAD COURSES CSV  (CourseName,ModuleCode)
-    // ------------------------------------------------------------
+    /**
+     * Loads the CSV file with details about courses/programmes
+     * @param filePath String name of file path
+     */
     public void loadCourses(String filePath) {
 
         courseMap.clear();
