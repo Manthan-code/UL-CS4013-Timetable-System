@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 //handles saves, reads, modifying the timetable entries
-public class TimetableManager {
+public class  TimetableManager {
 
     private List<TimetableEntry> entries = new ArrayList<>();
 
