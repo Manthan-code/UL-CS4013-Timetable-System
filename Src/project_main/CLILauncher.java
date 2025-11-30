@@ -653,8 +653,8 @@ public class CLILauncher {
 
             //cell structure
             String[] content = new String[]{
-                    " "+e.getModuleCode() + " - " + e.getClassType() + groupText,
-                    "     "+e.getLecturerName(),
+                    ""+e.getModuleCode() + " -" + e.getClassType() + groupText,
+                    "   "+e.getLecturerName(),
                     "      "+e.getRoomCode(),
                     "     "+"Wks:" + e.getStartWeek() + "-" + e.getEndWeek()
             };
