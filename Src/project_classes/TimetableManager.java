@@ -1,27 +1,30 @@
+//TimetableManager
+
 package project_classes;
 
 import project_io.CSVReader;
 import project_io.CSVWriter;
-
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Handles storing, loading, saving and modifying timetable entries.
- * Now uses CSVReader and CSVWriter instead of manual file I/O.
- */
-public class TimetableManager {
+//handles saves, reads, modifying the timetable entries
+public class  TimetableManager {
+    /**
+     * Class that saves, reads and handles the timetable entries
+     */
 
     private List<TimetableEntry> entries = new ArrayList<>();
 
+    /** Gets a list of the timetable entries*/
     public List<TimetableEntry> getEntries() {
         return entries;
     }
 
-    // --------------------------------------------------------
-    // LOAD CSV (using CSVReader)
-    // --------------------------------------------------------
+    /**
+     * Loads the CSV file with the timetable data.
+     * @param filePath String name of file path
+     */
     public void loadCSV(String filePath) {
         entries.clear();
         List<String[]> rows = CSVReader.readCSV(filePath);
@@ -58,24 +61,19 @@ public class TimetableManager {
                         startWeek,
                         endWeek
                 );
-
                 entries.add(entry);
-
             } catch (Exception e) {
                 System.out.println("Error loading row " + i + ": " + e.getMessage());
             }
         }
     }
 
-
-
-    // --------------------------------------------------------
-    // SAVE CSV (using CSVWriter)
-    // --------------------------------------------------------
+    /**
+     * Saves the data read in from the timetable data CSV file
+     * @param filePath String name of the file path
+     */
     public void saveCSV(String filePath) {
-
         List<String[]> rows = new ArrayList<>();
-
         rows.add(new String[]{
                 "Day","StartTime","EndTime","ModuleCode","RoomCode",
                 "ClassType","LecturerName","StudentGroup","StartWeek","EndWeek"
@@ -95,32 +93,31 @@ public class TimetableManager {
                     String.valueOf(e.getEndWeek())
             });
         }
-
         CSVWriter.writeCSV(filePath, rows);
         System.out.println("Timetable saved.");
     }
 
-
-
-    // --------------------------------------------------------
-    // ADD ENTRY (with conflict check)
-    // --------------------------------------------------------
+    /**
+     * Adds an entry to the list of timetable entries
+     * @param newEntry The new timetable entry to be added
+     * @return True if addition of entry was successful and vice versa
+     */
     public boolean addEntry(TimetableEntry newEntry) {
-
         for (TimetableEntry existing : entries) {
             if (existing.timeConflictsWith(newEntry)) {
                 System.out.println("Conflict with existing entry: " + existing);
                 return false;
             }
         }
-
         entries.add(newEntry);
         return true;
     }
 
-    // --------------------------------------------------------
-    // REMOVE ENTRY BY INDEX
-    // --------------------------------------------------------
+    /**
+     * Removes an entry from the list of timetable entries
+     * @param index The position of the entry to be removed in the list
+     * @return True if the index is valid and the entry is removed and vice versa
+     */
     public boolean removeEntry(int index) {
         if (index < 0 || index >= entries.size()) {
             return false;
@@ -129,63 +126,62 @@ public class TimetableManager {
         return true;
     }
 
-    // --------------------------------------------------------
-    // PRINT ALL
-    // --------------------------------------------------------
+    /**
+     * Prints each timetable entry in the list of entries
+     */
     public void printAll() {
         System.out.println("\n--- Complete Timetable ---");
 
         for (int i = 0; i < entries.size(); i++) {
             System.out.println(i + ": " + entries.get(i));
         }
-
         if (entries.isEmpty()) {
             System.out.println("No entries found.");
         }
     }
 
-    // --------------------------------------------------------
-    // FILTER: MODULE
-    // --------------------------------------------------------
+    /**
+     * Gets the timetable for a specified module
+     * @param moduleCode The String module code for the module. E.g. "CS4178"
+     * @return The list of entries that contains the module code.
+     */
     public List<TimetableEntry> getModuleTimetable(String moduleCode) {
         List<TimetableEntry> result = new ArrayList<>();
-
         for (TimetableEntry e : entries) {
             if (e.getModuleCode().equalsIgnoreCase(moduleCode)) {
                 result.add(e);
             }
         }
-
         return result;
     }
 
-    // --------------------------------------------------------
-    // FILTER: LECTURER
-    // --------------------------------------------------------
+    /**
+     * Gets the timetable for a specified lecturer
+     * @param lecturerName The String name of the lecturer
+     * @return The list of entries that contains the lecturerName.
+     */
     public List<TimetableEntry> getLecturerTimetable(String lecturerName) {
         List<TimetableEntry> result = new ArrayList<>();
-
         for (TimetableEntry e : entries) {
             if (e.getLecturerName().equalsIgnoreCase(lecturerName)) {
                 result.add(e);
             }
         }
-
         return result;
     }
-    // --------------------------------------------------------
-    // FILTER: ROOM TIMETABLE
-    // --------------------------------------------------------
+
+    /**
+     * Gets the timetable for a specified room
+     * @param roomCode The String room code for the room. E.g. "CS2044"
+     * @return The list of entries that contains the room code.
+     */
     public List<TimetableEntry> getRoomTimetable(String roomCode) {
         List<TimetableEntry> result = new ArrayList<>();
-
         for (TimetableEntry e : entries) {
             if (e.getRoomCode().equalsIgnoreCase(roomCode)) {
                 result.add(e);
             }
         }
-
         return result;
     }
-
 }
