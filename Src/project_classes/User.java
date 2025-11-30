@@ -13,6 +13,15 @@ public class User {
     private String extra;   // lecturerName OR studentGroup OR "-" for admin
     private String course;
 
+
+    /**
+     * Constructs a user object
+     * @param email
+     * @param password
+     * @param role
+     * @param extra
+     * @param course
+     */
     public User(String email, String password, String role, String extra, String course) {
         this.email = email;
         this.password = password;
