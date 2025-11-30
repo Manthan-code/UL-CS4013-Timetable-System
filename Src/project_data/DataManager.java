@@ -3,18 +3,19 @@ package project_data;
 import project_classes.Module;
 import project_classes.Room;
 import project_io.CSVReader;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
- * Loads Room and Module information from CSV files.
- * Uses CSVReader so no repeated file I/O code.
+ * Loads Modules, Rooms and Courses from CSV files.
+ * This keeps all the data loading in one place so the CLI is cleaner.
  */
 public class DataManager {
 
     private List<Module> modules = new ArrayList<>();
     private List<Room> rooms = new ArrayList<>();
+
+    // courseName -> list of module codes
+    private Map<String, List<String>> courseMap = new HashMap<>();
 
     public List<Module> getModules() {
         return modules;
@@ -22,6 +23,14 @@ public class DataManager {
 
     public List<Room> getRooms() {
         return rooms;
+    }
+
+    public Set<String> getCourseNames() {
+        return courseMap.keySet();
+    }
+
+    public List<String> getModulesForCourse(String courseName) {
+        return courseMap.getOrDefault(courseName, new ArrayList<>());
     }
 
     // ------------------------------------------------------------
@@ -37,7 +46,7 @@ public class DataManager {
             return;
         }
 
-        for (int i = 1; i < rows.size(); i++) { // skip header
+        for (int i = 1; i < rows.size(); i++) {
             String[] p = rows.get(i);
             if (p.length < 5) continue;
 
@@ -54,7 +63,6 @@ public class DataManager {
                 System.out.println("Bad module entry at row " + i);
             }
         }
-
         System.out.println("Loaded " + modules.size() + " modules.");
     }
 
@@ -71,7 +79,7 @@ public class DataManager {
             return;
         }
 
-        for (int i = 1; i < rows.size(); i++) { // skip header
+        for (int i = 1; i < rows.size(); i++) {
             String[] p = rows.get(i);
             if (p.length < 4) continue;
 
@@ -89,5 +97,33 @@ public class DataManager {
         }
 
         System.out.println("Loaded " + rooms.size() + " rooms.");
+    }
+
+    // ------------------------------------------------------------
+    // LOAD COURSES CSV  (CourseName,ModuleCode)
+    // ------------------------------------------------------------
+    public void loadCourses(String filePath) {
+
+        courseMap.clear();
+        List<String[]> rows = CSVReader.readCSV(filePath);
+
+        if (rows.isEmpty()) {
+            System.out.println("Warning: Course file empty or missing: " + filePath);
+            return;
+        }
+
+        for (int i = 1; i < rows.size(); i++) {
+            String[] p = rows.get(i);
+            if (p.length < 2) continue;
+
+            String course = p[0].trim();
+            String module = p[1].trim();
+
+            // Add module to the course list
+            courseMap.putIfAbsent(course, new ArrayList<>());
+            courseMap.get(course).add(module);
+        }
+
+        System.out.println("Loaded " + courseMap.size() + " courses.");
     }
 }
