@@ -18,6 +18,9 @@ import java.util.Scanner;
 
 // main CLI
 public class CLILauncher {
+    /**
+     * Class that handles the CLI of system
+     */
 
     private static final String USERS_FILE = "users.csv";
     private static final String TIMETABLE_FILE = "timetable_data.csv";
@@ -68,7 +71,10 @@ public class CLILauncher {
         scanner.close();
     }
 
-    //User Role Handling (Student, Lecturer, Admin)
+    /**
+     * Verifies the role that the user has
+     * @param user The user using the system
+     */
     private static void handleUserSession(User user) {
         String role = user.getRole().toLowerCase();
 
@@ -83,7 +89,9 @@ public class CLILauncher {
         }
     }
 
-    //adminMenu
+    /**
+     * Loads the admin menu for a successful admin login
+     */
     private static void adminMenu() {
         boolean loggedIn = true;
 
@@ -148,7 +156,10 @@ public class CLILauncher {
         }
     }
 
-    //lecturerMenu
+    /**
+     * Loads the lecturer menu for a successful lecturer login
+     * @param user The lecturer using the system
+     */
     private static void lecturerMenu(User user) {
         boolean loggedIn = true;
 
@@ -186,7 +197,10 @@ public class CLILauncher {
         }
     }
 
-    //studentMenu
+    /**
+     * Loads the student menu for a successful student login
+     * @param user The student using the system
+     */
     private static void studentMenu(User user) {
         boolean loggedIn = true;
 
@@ -224,9 +238,9 @@ public class CLILauncher {
         }
     }
 
-
-
-    // For Admin to choose the grp and course of Student
+    /**
+     * Allows admin user to choose the group and course of a student
+     */
     private static void viewStudentTimetablePrompt() {
         System.out.print("Enter student group (e.g. 3A or AI1A): ");
         String group = scanner.nextLine().trim();
@@ -265,7 +279,9 @@ public class CLILauncher {
         printWeeklyGrid(result, "Student Timetable (" + group + ", " + course + ")");
     }
 
-    // student version: uses user.getExtra() (group) + user.getCourse()
+    /**
+     * Handles prompt for viewing student timetable
+     */
     private static void viewStudentTimetable(User user) {
 
         String group = user.getExtra();     // 3A or AI1A etc.
@@ -302,7 +318,9 @@ public class CLILauncher {
         printWeeklyGrid(result, "Your Timetable (" + group + " - " + course + ")");
     }
 
-    // course timetable: based on course code LM121 / LM174
+    /**
+     * Handles prompt for viewing course timetable
+     */
     private static void viewCourseTimetablePrompt() {
 
         System.out.print("Enter course code (LM121 - BSc. CS, LM174 - BSc. AI/ML): ");
@@ -332,6 +350,9 @@ public class CLILauncher {
         printWeeklyGrid(result, "Course timetable for " + courseCode);
     }
 
+    /**
+     * Handles prompt for viewing module timetable
+     */
     private static void viewModuleTimetablePrompt() {
         System.out.print("Enter module code (e.g. CS4013): ");
         String module = scanner.nextLine().trim();
@@ -340,6 +361,9 @@ public class CLILauncher {
 
     }
 
+    /**
+     * Handles prompt for viewing lecturer timetable
+     */
     private static void viewLecturerTimetablePrompt() {
         System.out.print("Enter lecturer name: ");
         String name = scanner.nextLine().trim();
@@ -347,6 +371,9 @@ public class CLILauncher {
         printWeeklyGrid(list, "Lecturer timetable for " + name);
     }
 
+    /**
+     * Handles prompt for viewing room timetable
+     */
     private static void viewRoomTimetablePrompt() {
         System.out.print("Enter room code (e.g. CS2044): ");
         String room = scanner.nextLine().trim();
@@ -355,6 +382,9 @@ public class CLILauncher {
 
     }
 
+    /**
+     * Handles prompt for viewing all modules in a timetable
+     */
     private static void viewAllModules() {
         List<project_classes.Module> modules = dataManager.getModules();
         System.out.println("\n--- All Modules ---");
@@ -367,6 +397,9 @@ public class CLILauncher {
         }
     }
 
+    /**
+     * Handles prompt for viewing all rooms in a timetable
+     */
     private static void viewAllRooms() {
         List<Room> rooms = dataManager.getRooms();
         System.out.println("\n--- All Rooms ---");
@@ -380,7 +413,9 @@ public class CLILauncher {
     }
 
 
-    //add/edit/delete Options for Admin role
+    /**
+     * Allows admin user to add timetable entries
+     */
     private static void addNewEntry() {
         System.out.println("\n--- Add New Timetable Entry ---");
 
@@ -441,6 +476,9 @@ public class CLILauncher {
         }
     }
 
+    /**
+     * Allows admin user to modify existing timetable entries
+     */
     private static void editEntry() {
         System.out.println("\n--- Edit Timetable Entry ---");
         manager.printAll();
@@ -541,6 +579,9 @@ public class CLILauncher {
         }
     }
 
+    /**
+     * Allows admin user to delete timetable entries
+     */
     private static void deleteEntry() {
         System.out.println("\n--- Delete Timetable Entry ---");
         manager.printAll();
@@ -555,6 +596,12 @@ public class CLILauncher {
             System.out.println("Invalid index. Nothing deleted.");
         }
     }
+
+    /**
+     * Formats/prints the structure of the timetable grid
+     * @param list ArrayList of timetable entries
+     * @param title String title of the timetable
+     */
 
     private static void printWeeklyGrid(List<TimetableEntry> list, String title) {
         System.out.println("\n=== " + title + " ===");
@@ -653,8 +700,11 @@ public class CLILauncher {
         }
     }
 
+    /**
+     * Reads integer values from the user in the CLI.
+     * @return Number read from the user on command line
+     */
 
-    // helper to read an int from user and make sure they don't crash the program
     private static int readIntFromUser() {
         while (true) {
             String line = scanner.nextLine().trim();
@@ -665,6 +715,14 @@ public class CLILauncher {
             }
         }
     }
+
+    /**
+     * Reads integer values from user
+     * Default value is outputted if the integer can't be read in.
+     * @param text String user input
+     * @param defaultValue int default value to be returned
+     * @return The int read from user/default int value
+     */
 
     private static int parseIntOrDefault(String text, int defaultValue) {
         try {
