@@ -3,6 +3,10 @@ package project_classes;
 //user model
 public class User {
 
+    /**
+     * Class that stores user details and represents users of system
+     */
+
     private String email;
     private String password;
     private String role;
@@ -17,22 +21,30 @@ public class User {
         this.course = course;
     }
 
-    //getters
+    /** Gets the email address of user*/
     public String getEmail() {
         return email;
     }
 
+    /** Gets the role of user*/
     public String getRole() {
         return role;
     }
 
+    /** Gets the extra tag of user*/
     public String getExtra() {
         return extra;
     }
 
+    /** Gets the course of the user*/
     public String getCourse() {
         return course;
     }
+
+    /**
+     * Returns the details of a user in String format
+     * @return String details of user.
+     */
 
     public String toString() {
         return "User{" +

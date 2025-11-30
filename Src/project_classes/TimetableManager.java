@@ -10,14 +10,21 @@ import java.util.List;
 
 //handles saves, reads, modifying the timetable entries
 public class  TimetableManager {
+    /**
+     * Class that saves, reads and handles the timetable entries
+     */
 
     private List<TimetableEntry> entries = new ArrayList<>();
 
+    /** Gets a list of the timetable entries*/
     public List<TimetableEntry> getEntries() {
         return entries;
     }
 
-    //csv Loader
+    /**
+     * Loads the CSV file with the timetable data.
+     * @param filePath String name of file path
+     */
     public void loadCSV(String filePath) {
         entries.clear();
         List<String[]> rows = CSVReader.readCSV(filePath);
@@ -61,7 +68,10 @@ public class  TimetableManager {
         }
     }
 
-    // CSV Writer
+    /**
+     * Saves the data read in from the timetable data CSV file
+     * @param filePath String name of the file path
+     */
     public void saveCSV(String filePath) {
         List<String[]> rows = new ArrayList<>();
         rows.add(new String[]{
@@ -87,7 +97,11 @@ public class  TimetableManager {
         System.out.println("Timetable saved.");
     }
 
-    // CSV Writer
+    /**
+     * Adds an entry to the list of timetable entries
+     * @param newEntry The new timetable entry to be added
+     * @return True if addition of entry was successful and vice versa
+     */
     public boolean addEntry(TimetableEntry newEntry) {
         for (TimetableEntry existing : entries) {
             if (existing.timeConflictsWith(newEntry)) {
@@ -99,7 +113,11 @@ public class  TimetableManager {
         return true;
     }
 
-    // CSV Writer
+    /**
+     * Removes an entry from the list of timetable entries
+     * @param index The position of the entry to be removed in the list
+     * @return True if the index is valid and the entry is removed and vice versa
+     */
     public boolean removeEntry(int index) {
         if (index < 0 || index >= entries.size()) {
             return false;
@@ -108,7 +126,9 @@ public class  TimetableManager {
         return true;
     }
 
-    //print All
+    /**
+     * Prints each timetable entry in the list of entries
+     */
     public void printAll() {
         System.out.println("\n--- Complete Timetable ---");
 
@@ -120,7 +140,11 @@ public class  TimetableManager {
         }
     }
 
-    //filter Module
+    /**
+     * Gets the timetable for a specified module
+     * @param moduleCode The String module code for the module. E.g. "CS4178"
+     * @return The list of entries that contains the module code.
+     */
     public List<TimetableEntry> getModuleTimetable(String moduleCode) {
         List<TimetableEntry> result = new ArrayList<>();
         for (TimetableEntry e : entries) {
@@ -131,7 +155,11 @@ public class  TimetableManager {
         return result;
     }
 
-    //filter Lecturer
+    /**
+     * Gets the timetable for a specified lecturer
+     * @param lecturerName The String name of the lecturer
+     * @return The list of entries that contains the lecturerName.
+     */
     public List<TimetableEntry> getLecturerTimetable(String lecturerName) {
         List<TimetableEntry> result = new ArrayList<>();
         for (TimetableEntry e : entries) {
@@ -142,7 +170,11 @@ public class  TimetableManager {
         return result;
     }
 
-    //filter Rooms
+    /**
+     * Gets the timetable for a specified room
+     * @param roomCode The String room code for the room. E.g. "CS2044"
+     * @return The list of entries that contains the room code.
+     */
     public List<TimetableEntry> getRoomTimetable(String roomCode) {
         List<TimetableEntry> result = new ArrayList<>();
         for (TimetableEntry e : entries) {

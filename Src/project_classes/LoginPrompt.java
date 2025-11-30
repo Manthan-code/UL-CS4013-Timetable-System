@@ -6,13 +6,22 @@ import java.util.Scanner;
 
 public class LoginPrompt {
 
+    /**
+     * Class to handle user logins
+     */
+
     private String usersFilePath;
 
     public LoginPrompt(String usersFilePath) {
         this.usersFilePath = usersFilePath;
     }
 
-    // main login flow
+    /**
+     * Handles the login logic in the system
+     * Notfies user of a valid/invalid login attempt
+     * @param scanner The user's inputs (email and password)
+     * @return The User who is logged into the system
+     */
     public User login(Scanner scanner) {
         int attempts = 0;
 
@@ -44,7 +53,12 @@ public class LoginPrompt {
         return null;
     }
 
-    // finds the user inside users.csv
+    /**
+     * Finds the user inside the users.csv file
+     * @param email The String email address of the user
+     * @param password The string password for thr user's account
+     * @return A user who exists in the users.csv file
+     */
     private User findUser(String email, String password) {
 
         List<String[]> rows = CSVReader.readCSV(usersFilePath);
