@@ -1,3 +1,5 @@
+//CLILauncher
+
 package project_main;
 
 import project_classes.User;
@@ -5,9 +7,7 @@ import project_classes.LoginPrompt;
 import project_classes.TimeSlot;
 import project_classes.TimetableEntry;
 import project_classes.TimetableManager;
-import project_classes.Module;
 import project_classes.Room;
-
 import project_data.DataManager;
 
 import java.time.LocalTime;
@@ -16,21 +16,21 @@ import java.util.List;
 import java.util.Scanner;
 
 
-
-/**
- * Main command-line interface for the timetable system.
- */
+// main CLI
 public class CLILauncher {
+    /**
+     * Class that handles the CLI of system
+     */
 
     private static final String USERS_FILE = "users.csv";
     private static final String TIMETABLE_FILE = "timetable_data.csv";
     private static final String MODULES_FILE = "timetableModules.csv";
     private static final String ROOMS_FILE = "timetableRooms.csv";
+    private static final String COURSES_FILE = "courses.csv";
 
     private static TimetableManager manager = new TimetableManager();
     private static LoginPrompt loginPrompt = new LoginPrompt(USERS_FILE);
     private static DataManager dataManager = new DataManager();
-
     private static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
@@ -38,6 +38,7 @@ public class CLILauncher {
         // Load all CSV data
         dataManager.loadModules(MODULES_FILE);
         dataManager.loadRooms(ROOMS_FILE);
+        dataManager.loadCourses(COURSES_FILE);
         manager.loadCSV(TIMETABLE_FILE);
 
         boolean running = true;
@@ -67,14 +68,13 @@ public class CLILauncher {
                     System.out.println("Invalid option. Please try again.");
             }
         }
-
         scanner.close();
     }
 
-    // ------------------------------------------------------------
-    // ROLE HANDLING
-    // ------------------------------------------------------------
-
+    /**
+     * Verifies the role that the user has
+     * @param user The user using the system
+     */
     private static void handleUserSession(User user) {
         String role = user.getRole().toLowerCase();
 
@@ -89,17 +89,16 @@ public class CLILauncher {
         }
     }
 
-    // ------------------------------------------------------------
-    // ADMIN MENU
-    // ------------------------------------------------------------
-
+    /**
+     * Loads the admin menu for a successful admin login
+     */
     private static void adminMenu() {
         boolean loggedIn = true;
 
         while (loggedIn) {
             System.out.println("\n=== ADMIN MENU ===");
             System.out.println("1. View Student Timetable");
-            System.out.println("2. View Course Timetable (by group)");
+            System.out.println("2. View Course Timetable (LM121/LM174)");
             System.out.println("3. View Module Timetable");
             System.out.println("4. View Lecturer Timetable");
             System.out.println("5. View Room Timetable");
@@ -157,10 +156,10 @@ public class CLILauncher {
         }
     }
 
-    // ------------------------------------------------------------
-    // LECTURER MENU
-    // ------------------------------------------------------------
-
+    /**
+     * Loads the lecturer menu for a successful lecturer login
+     * @param user The lecturer using the system
+     */
     private static void lecturerMenu(User user) {
         boolean loggedIn = true;
 
@@ -168,7 +167,7 @@ public class CLILauncher {
             System.out.println("\n=== LECTURER MENU ===");
             System.out.println("1. View Your Timetable");
             System.out.println("2. View Module Timetable");
-            System.out.println("3. View Course Timetable (by group)");
+            System.out.println("3. View Course Timetable (LM121/LM174)");
             System.out.println("4. View Room Timetable");
             System.out.println("5. Logout");
             System.out.print("Choose: ");
@@ -179,7 +178,6 @@ public class CLILauncher {
                 case "1":
                     List<TimetableEntry> lecList = manager.getLecturerTimetable(user.getExtra());
                     printWeeklyGrid(lecList, "Your Timetable (" + user.getExtra() + ")");
-
                     break;
                 case "2":
                     viewModuleTimetablePrompt();
@@ -199,17 +197,17 @@ public class CLILauncher {
         }
     }
 
-    // ------------------------------------------------------------
-    // STUDENT MENU
-    // ------------------------------------------------------------
-
+    /**
+     * Loads the student menu for a successful student login
+     * @param user The student using the system
+     */
     private static void studentMenu(User user) {
         boolean loggedIn = true;
 
         while (loggedIn) {
             System.out.println("\n=== STUDENT MENU ===");
             System.out.println("1. View Your Timetable");
-            System.out.println("2. View Course Timetable (by group)");
+            System.out.println("2. View Course Timetable (LM121/LM174)");
             System.out.println("3. View Module Timetable");
             System.out.println("4. View Room Timetable");
             System.out.println("5. Logout");
@@ -219,7 +217,8 @@ public class CLILauncher {
 
             switch (choice) {
                 case "1":
-                    viewStudentTimetable(user.getExtra());
+                    // use group + course from logged in user
+                    viewStudentTimetable(user);
                     break;
                 case "2":
                     viewCourseTimetablePrompt();
@@ -239,37 +238,121 @@ public class CLILauncher {
         }
     }
 
-    // ------------------------------------------------------------
-    // VIEW HELPERS
-    // ------------------------------------------------------------
-
+    /**
+     * Allows admin user to choose the group and course of a student
+     */
     private static void viewStudentTimetablePrompt() {
-        System.out.print("Enter student group (e.g. CS1A): ");
+        System.out.print("Enter student group (e.g. 3A or AI1A): ");
         String group = scanner.nextLine().trim();
-        viewStudentTimetable(group);
-    }
 
-    private static void viewStudentTimetable(String group) {
+        System.out.print("Enter course code (LM121/LM174): ");
+        String course = scanner.nextLine().trim().toUpperCase();
+
+        List<String> courseModules = dataManager.getModulesForCourse(course);
+        if (courseModules == null || courseModules.isEmpty()) {
+            System.out.println("No modules found for course: " + course);
+            return;
+        }
+
         List<TimetableEntry> all = manager.getEntries();
         List<TimetableEntry> result = new ArrayList<>();
 
         for (TimetableEntry e : all) {
-            if (e.getStudentGroup() != null &&
-                    e.getStudentGroup().equalsIgnoreCase(group)) {
+
+            boolean belongsToCourse = courseModules.contains(e.getModuleCode());
+            boolean isLecture = e.getClassType().equalsIgnoreCase("LEC");
+
+            if (!belongsToCourse) continue;
+
+            if (isLecture) {
+                // show lectures for the full course
                 result.add(e);
+            } else {
+                // show only labs/tuts that match group
+                if (e.getStudentGroup() != null &&
+                        e.getStudentGroup().equalsIgnoreCase(group)) {
+                    result.add(e);
+                }
             }
         }
 
-        printWeeklyGrid(result, "Student timetable for group " + group);
-
+        printWeeklyGrid(result, "Student Timetable (" + group + ", " + course + ")");
     }
 
+    /**
+     * Handles prompt for viewing student timetable
+     */
+    private static void viewStudentTimetable(User user) {
+
+        String group = user.getExtra();     // 3A or AI1A etc.
+        String course = user.getCourse();   // LM121 or LM174
+
+        List<String> courseModules = dataManager.getModulesForCourse(course);
+        if (courseModules == null || courseModules.isEmpty()) {
+            System.out.println("No modules found for your course: " + course);
+            return;
+        }
+
+        List<TimetableEntry> all = manager.getEntries();
+        List<TimetableEntry> result = new ArrayList<>();
+
+        for (TimetableEntry e : all) {
+
+            boolean isLecture = e.getClassType().equalsIgnoreCase("LEC");
+            boolean belongsToCourse = courseModules.contains(e.getModuleCode());
+
+            if (!belongsToCourse) continue;
+
+            if (isLecture) {
+                // all lectures of that course
+                result.add(e);
+            } else {
+                // labs/tuts for the student's group only
+                if (e.getStudentGroup() != null &&
+                        e.getStudentGroup().equalsIgnoreCase(group)) {
+                    result.add(e);
+                }
+            }
+        }
+
+        printWeeklyGrid(result, "Your Timetable (" + group + " - " + course + ")");
+    }
+
+    /**
+     * Handles prompt for viewing course timetable
+     */
     private static void viewCourseTimetablePrompt() {
-        System.out.print("Enter course / group code (e.g. CS1A): ");
-        String group = scanner.nextLine().trim();
-        viewStudentTimetable(group);
+
+        System.out.print("Enter course code (LM121 - BSc. CS, LM174 - BSc. AI/ML): ");
+        String courseCode = scanner.nextLine().trim().toUpperCase();
+
+        List<String> courseModules = dataManager.getModulesForCourse(courseCode);
+
+        if (courseModules == null || courseModules.isEmpty()) {
+            System.out.println("No modules found for course: " + courseCode);
+            System.out.println("Check courses.csv or the code you entered.");
+            return;
+        }
+
+        List<TimetableEntry> all = manager.getEntries();
+        List<TimetableEntry> result = new ArrayList<>();
+
+        for (TimetableEntry e : all) {
+            String mod = e.getModuleCode();
+            for (String m : courseModules) {
+                if (mod.equalsIgnoreCase(m)) {
+                    result.add(e);
+                    break;
+                }
+            }
+        }
+
+        printWeeklyGrid(result, "Course timetable for " + courseCode);
     }
 
+    /**
+     * Handles prompt for viewing module timetable
+     */
     private static void viewModuleTimetablePrompt() {
         System.out.print("Enter module code (e.g. CS4013): ");
         String module = scanner.nextLine().trim();
@@ -278,6 +361,9 @@ public class CLILauncher {
 
     }
 
+    /**
+     * Handles prompt for viewing lecturer timetable
+     */
     private static void viewLecturerTimetablePrompt() {
         System.out.print("Enter lecturer name: ");
         String name = scanner.nextLine().trim();
@@ -285,6 +371,9 @@ public class CLILauncher {
         printWeeklyGrid(list, "Lecturer timetable for " + name);
     }
 
+    /**
+     * Handles prompt for viewing room timetable
+     */
     private static void viewRoomTimetablePrompt() {
         System.out.print("Enter room code (e.g. CS2044): ");
         String room = scanner.nextLine().trim();
@@ -293,18 +382,24 @@ public class CLILauncher {
 
     }
 
+    /**
+     * Handles prompt for viewing all modules in a timetable
+     */
     private static void viewAllModules() {
-        List<Module> modules = dataManager.getModules();
+        List<project_classes.Module> modules = dataManager.getModules();
         System.out.println("\n--- All Modules ---");
         if (modules.isEmpty()) {
             System.out.println("No modules loaded.");
         } else {
-            for (Module m : modules) {
+            for (project_classes.Module m : modules) {
                 System.out.println(m);
             }
         }
     }
 
+    /**
+     * Handles prompt for viewing all rooms in a timetable
+     */
     private static void viewAllRooms() {
         List<Room> rooms = dataManager.getRooms();
         System.out.println("\n--- All Rooms ---");
@@ -317,21 +412,10 @@ public class CLILauncher {
         }
     }
 
-    private static void printEntries(List<TimetableEntry> list, String title) {
-        System.out.println("\n--- " + title + " ---");
-        if (list == null || list.isEmpty()) {
-            System.out.println("No entries found.");
-        } else {
-            for (TimetableEntry e : list) {
-                System.out.println(e);
-            }
-        }
-    }
 
-    // ------------------------------------------------------------
-    // ADMIN: ADD / EDIT / DELETE
-    // ------------------------------------------------------------
-
+    /**
+     * Allows admin user to add timetable entries
+     */
     private static void addNewEntry() {
         System.out.println("\n--- Add New Timetable Entry ---");
 
@@ -356,7 +440,7 @@ public class CLILauncher {
         System.out.print("Enter lecturer name: ");
         String lecturer = scanner.nextLine().trim();
 
-        System.out.print("Enter student group (e.g. CS1A): ");
+        System.out.print("Enter student group (e.g. 3A, 3B, AI1A): ");
         String group = scanner.nextLine().trim();
 
         System.out.print("Enter start week: ");
@@ -387,12 +471,14 @@ public class CLILauncher {
             } else {
                 System.out.println("Could not add entry (conflict detected).");
             }
-
         } catch (Exception e) {
             System.out.println("Error: invalid time format.");
         }
     }
 
+    /**
+     * Allows admin user to modify existing timetable entries
+     */
     private static void editEntry() {
         System.out.println("\n--- Edit Timetable Entry ---");
         manager.printAll();
@@ -478,7 +564,6 @@ public class CLILauncher {
                     endWeek
             );
 
-            // Try replacing
             manager.removeEntry(index);
             boolean ok = manager.addEntry(newEntry);
 
@@ -488,13 +573,15 @@ public class CLILauncher {
                 System.out.println("Update failed (conflict). Reverting.");
                 manager.addEntry(oldEntry);
             }
-
         } catch (Exception e) {
             System.out.println("Error: invalid time format.");
             manager.addEntry(oldEntry); // ensure not lost
         }
     }
 
+    /**
+     * Allows admin user to delete timetable entries
+     */
     private static void deleteEntry() {
         System.out.println("\n--- Delete Timetable Entry ---");
         manager.printAll();
@@ -510,8 +597,13 @@ public class CLILauncher {
         }
     }
 
-    private static void printWeeklyGrid(List<TimetableEntry> list, String title) {
+    /**
+     * Formats/prints the structure of the timetable grid
+     * @param list ArrayList of timetable entries
+     * @param title String title of the timetable
+     */
 
+    private static void printWeeklyGrid(List<TimetableEntry> list, String title) {
         System.out.println("\n=== " + title + " ===");
 
         if (list == null || list.isEmpty()) {
@@ -524,10 +616,10 @@ public class CLILauncher {
         int startHour = 9;
         int endHour = 17;
 
-        // grid[row][day] = array of 4 lines
+        //4lines of spacing y-axis in each block
         String[][][] grid = new String[(endHour - startHour)][days.length][4];
 
-        // Fill all cells with empty 4-line blocks
+        //fill empty space for 4 line gap in between cells
         for (int r = 0; r < grid.length; r++) {
             for (int d = 0; d < days.length; d++) {
                 for (int line = 0; line < 4; line++) {
@@ -536,7 +628,7 @@ public class CLILauncher {
             }
         }
 
-        // Insert timetable entries
+        //Insert timetable entries
         for (TimetableEntry e : list) {
 
             int sh = e.getTimeSlot().getStartTime().getHour();
@@ -553,12 +645,20 @@ public class CLILauncher {
             }
             if (dayIndex == -1) continue;
 
+            String groupText = "";
+            //No GRP description for LEC
+            if (!e.getClassType().equalsIgnoreCase("LEC") && e.getStudentGroup() != null) {
+                groupText = " - " + e.getStudentGroup();
+            }
+
+            //cell structure
             String[] content = new String[]{
-                    e.getModuleCode() + " (" + e.getRoomCode() + ")",
-                    e.getClassType() + " - " + e.getLecturerName(),
-                    "W" + e.getStartWeek() + "-" + e.getEndWeek(),
-                    ""
+                    ""+e.getModuleCode() + " -" + e.getClassType() + groupText,
+                    "   "+e.getLecturerName(),
+                    "      "+e.getRoomCode(),
+                    "     "+"Wks:" + e.getStartWeek() + "-" + e.getEndWeek()
             };
+
 
             for (int r = rowStart; r < rowEnd; r++) {
                 if (r >= 0 && r < grid.length) {
@@ -568,6 +668,7 @@ public class CLILauncher {
         }
 
         // Print table
+        //An actual Grid/Matrix like TimeTable
         String line =
                 "+---------+--------------------+--------------------+--------------------+--------------------+--------------------+";
 
@@ -599,10 +700,10 @@ public class CLILauncher {
         }
     }
 
-
-    // ------------------------------------------------------------
-    // SMALL INPUT HELPERS
-    // ------------------------------------------------------------
+    /**
+     * Reads integer values from the user in the CLI.
+     * @return Number read from the user on command line
+     */
 
     private static int readIntFromUser() {
         while (true) {
@@ -614,6 +715,14 @@ public class CLILauncher {
             }
         }
     }
+
+    /**
+     * Reads integer values from user
+     * Default value is outputted if the integer can't be read in.
+     * @param text String user input
+     * @param defaultValue int default value to be returned
+     * @return The int read from user/default int value
+     */
 
     private static int parseIntOrDefault(String text, int defaultValue) {
         try {
